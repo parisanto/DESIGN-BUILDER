@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora · Studio de Prompts — Configurateur Midjourney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   AURORA DESIGN SYSTEM — tokens (dérivés de la fiche v1.0)
+   ============================================================ */
+:root{
+  /* Dégradé principal violet -> magenta -> rose */
+  --violet:#7C3AED;  --magenta:#C026D3;  --rose:#EC4899;  --corail:#FB7185;
+  --lavande:#A78BFA;
+  --grad:linear-gradient(135deg,#7C3AED 0%,#C026D3 50%,#EC4899 100%);
+  --grad-warm:linear-gradient(135deg,#7C3AED 0%,#C026D3 45%,#FB7185 100%);
+  /* Surfaces sombres */
+  --deep:#12141F;  --appbg:#1B1E2E;  --card:#23273B;  --cardhi:#2C3149;  --border:#3A3F57;
+  /* Texte */
+  --t1:#F5F3FA;  --t2:#C7CBDC;  --t3:#8E93B0;
+  /* Rayons */
+  --r-sm:8px; --r-card:12px; --r-panel:16px; --r-win:24px; --r-pill:999px;
+  /* Verre */
+  --glass-bg:rgba(255,255,255,.10); --glass-bd:rgba(255,255,255,.22); --glass-blur:6px;
+  /* Glow */
+  --glow:0 0 50px rgba(192,38,211,.45);
+  --shadow-1:0 1px 2px rgba(0,0,0,.25);
+  --shadow-2:0 8px 24px rgba(0,0,0,.35);
+  --shadow-3:0 20px 60px rgba(0,0,0,.5);
+  --font-title:"Space Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);
+  background:var(--deep);
+  color:var(--t1);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+/* Halos d'ambiance en fond (un seul dégradé chaud par écran) */
+body::before,body::after{
+  content:"";position:fixed;border-radius:50%;filter:blur(40px);z-index:0;pointer-events:none;
+}
+body::before{
+  width:620px;height:620px;top:-260px;right:-160px;
+  background:radial-gradient(circle at 35% 35%,rgba(236,72,153,.55),rgba(124,58,237,.35) 45%,transparent 70%);
+  opacity:.9;
+}
+body::after{
+  width:520px;height:520px;bottom:-240px;left:-200px;
+  background:radial-gradient(circle at 50% 50%,rgba(167,139,250,.35),transparent 68%);
+  opacity:.8;
+}
+.wrap{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+
+/* ============================== HEADER / HÉRO ============================== */
+header{padding:38px 0 12px}
+.brandline{display:flex;align-items:center;gap:14px;margin-bottom:34px}
+.dots{display:flex;gap:8px}
+.dots span{width:12px;height:12px;border-radius:50%}
+.dots span:nth-child(1){background:var(--corail)}
+.dots span:nth-child(2){background:var(--magenta)}
+.dots span:nth-child(3){background:var(--violet)}
+.brandline .kicker{font-family:var(--font-title);font-weight:500;letter-spacing:.22em;font-size:12px;color:var(--t3);text-transform:uppercase}
+.hero h1{
+  font-family:var(--font-title);font-weight:700;line-height:1.02;
+  font-size:clamp(40px,7vw,72px);letter-spacing:-.02em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:14px;
+}
+.hero .lead{font-size:clamp(16px,2vw,20px);color:var(--t2);max-width:640px}
+.hero .sub{font-size:14px;color:var(--t3);max-width:680px;margin-top:10px}
+
+/* Presets */
+.presets{display:flex;flex-wrap:wrap;gap:10px;margin:30px 0 8px;align-items:center}
+.presets .plabel{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-right:4px;font-family:var(--font-title)}
+.preset{
+  font-family:var(--font-title);font-weight:500;font-size:13px;color:var(--t2);
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r-pill);
+  padding:9px 16px;cursor:pointer;transition:.18s;white-space:nowrap;
+}
+.preset:hover{color:var(--t1);border-color:transparent;background:var(--cardhi);box-shadow:var(--glow)}
+.preset.active{background:var(--grad-warm);color:#fff;border-color:transparent;box-shadow:0 0 30px rgba(192,38,211,.5)}
+
+/* ============================== GRILLE PRINCIPALE ============================== */
+.layout{display:grid;grid-template-columns:1fr 480px;gap:24px;align-items:start;margin:24px 0 64px}
+@media(max-width:1120px){.layout{grid-template-columns:1fr}}
+
+/* Cartes de contrôle (rayon 12–16, fond carte) */
+.panel{
+  background:linear-gradient(180deg,var(--card),#212539);
+  border:1px solid var(--border);border-radius:var(--r-panel);
+  padding:22px 22px 24px;margin-bottom:20px;box-shadow:var(--shadow-1);
+}
+.panel .phead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px}
+.panel .num{font-family:var(--font-title);font-size:11px;letter-spacing:.2em;color:var(--lavande);text-transform:uppercase}
+.panel h2{font-family:var(--font-title);font-weight:600;font-size:19px;color:var(--t1);margin:2px 0 4px}
+.panel .hint{font-size:12.5px;color:var(--t3);margin-bottom:16px}
+.field{margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+label.lbl{display:block;font-size:12.5px;font-weight:600;color:var(--t2);margin-bottom:8px;letter-spacing:.01em}
+label.lbl .opt{color:var(--t3);font-weight:400}
+
+/* Inputs */
+input[type=text],textarea,select{
+  width:100%;font-family:var(--font-body);font-size:14px;color:var(--t1);
+  background:var(--deep);border:1px solid var(--border);border-radius:var(--r-card);
+  padding:11px 13px;transition:.16s;
+}
+textarea{resize:vertical;min-height:64px;line-height:1.55}
+input::placeholder,textarea::placeholder{color:#5c6180}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,58,237,.25)}
+select{appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%238E93B0' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+datalist{display:none}
+
+/* Chips multi-sélection */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  font-size:13px;color:var(--t2);background:var(--deep);
+  border:1px solid var(--border);border-radius:var(--r-pill);
+  padding:7px 14px;cursor:pointer;transition:.15s;user-select:none;
+}
+.chip:hover{color:var(--t1);border-color:var(--lavande)}
+.chip.on{background:var(--grad-warm);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(192,38,211,.35)}
+
+/* Cartes d'architecture cliquables */
+.cardgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.pick{
+  text-align:left;background:var(--deep);border:1px solid var(--border);
+  border-radius:var(--r-card);padding:13px 14px;cursor:pointer;transition:.16s;
+  display:flex;gap:11px;align-items:flex-start;
+}
+.pick:hover{border-color:var(--lavande);background:var(--cardhi)}
+.pick.on{border-color:transparent;background:linear-gradient(135deg,rgba(124,58,237,.28),rgba(236,72,153,.20));box-shadow:0 0 0 1px var(--violet) inset,0 8px 22px rgba(124,58,237,.25)}
+.pick .ico{flex:0 0 auto;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--card);border:1px solid var(--border)}
+.pick.on .ico{background:var(--grad-warm);border-color:transparent}
+.pick .ico svg{width:16px;height:16px}
+.pick .pt{font-family:var(--font-title);font-weight:600;font-size:13.5px;color:var(--t1);line-height:1.2}
+.pick .pd{font-size:11.5px;color:var(--t3);margin-top:2px}
+
+/* Sliders */
+.slider-row{margin-bottom:18px}
+.slider-row .sr-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.slider-row .sr-name{font-size:13px;font-weight:600;color:var(--t2)}
+.slider-row .sr-name code{font-family:var(--font-title);color:var(--t3);font-weight:500;font-size:11.5px}
+.slider-row .sr-val{font-family:var(--font-title);font-weight:600;font-size:14px;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;
+  background:var(--border);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:999px}
+input[type=range]::-moz-range-track{height:6px;border-radius:999px;background:var(--border)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+  background:var(--grad-warm);margin-top:-6px;box-shadow:0 0 12px rgba(192,38,211,.6);border:2px solid #fff}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--grad-warm);border:2px solid #fff;box-shadow:0 0 12px rgba(192,38,211,.6)}
+.sr-scale{display:flex;justify-content:space-between;font-size:10.5px;color:var(--t3);margin-top:5px}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:2px 0}
+.toggle-row .tl{font-size:13px;font-weight:600;color:var(--t2)}
+.toggle-row .tl small{display:block;font-weight:400;color:var(--t3);font-size:11.5px;margin-top:1px}
+.switch{position:relative;width:46px;height:26px;flex:0 0 auto}
+.switch input{opacity:0;width:0;height:0}
+.switch .track{position:absolute;inset:0;background:var(--border);border-radius:999px;transition:.2s;cursor:pointer}
+.switch .track::before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:var(--t2);transition:.2s}
+.switch input:checked + .track{background:var(--grad-warm)}
+.switch input:checked + .track::before{transform:translateX(20px);background:#fff}
+
+/* Segmented control */
+.seg{display:inline-flex;background:var(--deep);border:1px solid var(--border);border-radius:var(--r-pill);padding:3px;gap:2px}
+.seg button{font-family:var(--font-title);font-weight:500;font-size:12.5px;color:var(--t3);background:none;border:none;
+  padding:7px 15px;border-radius:var(--r-pill);cursor:pointer;transition:.15s}
+.seg button.on{background:var(--grad-warm);color:#fff;box-shadow:0 3px 10px rgba(192,38,211,.4)}
+
+/* Palettes prédéfinies */
+.palgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.palpick{cursor:pointer;border:1px solid var(--border);border-radius:var(--r-card);overflow:hidden;background:var(--deep);transition:.15s}
+.palpick:hover{border-color:var(--lavande)}
+.palpick.on{border-color:transparent;box-shadow:0 0 0 2px var(--violet)}
+.palpick .swatch{height:34px;display:flex}
+.palpick .swatch i{flex:1}
+.palpick .pn{font-size:11px;color:var(--t2);text-align:center;padding:6px 4px;font-weight:500}
+
+/* Sections narratives (advanced) */
+.sec-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.sec-item{display:flex;align-items:center;gap:10px;background:var(--deep);border:1px solid var(--border);border-radius:var(--r-card);padding:8px 10px 8px 12px}
+.sec-item .idx{font-family:var(--font-title);font-weight:600;font-size:12px;color:#fff;background:var(--grad-warm);width:24px;height:24px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto}
+.sec-item select{background-color:var(--card);flex:1;padding:8px 30px 8px 11px;font-size:13px}
+.sec-item .del{background:none;border:none;color:var(--t3);cursor:pointer;font-size:18px;line-height:1;padding:4px 6px;border-radius:6px;transition:.15s}
+.sec-item .del:hover{color:var(--corail);background:rgba(251,113,133,.12)}
+.sec-add{width:100%;font-family:var(--font-title);font-weight:500;font-size:13px;color:var(--lavande);background:var(--deep);
+  border:1px dashed var(--border);border-radius:var(--r-card);padding:10px;cursor:pointer;transition:.15s}
+.sec-add:hover{border-color:var(--lavande);color:var(--t1);background:var(--cardhi)}
+
+.collapse-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.collapse-head .caret{transition:.2s;color:var(--t3);font-size:13px}
+.panel.collapsed .collapse-body{display:none}
+.panel.collapsed .caret{transform:rotate(-90deg)}
+
+/* ============================== COLONNE APERÇU (sticky) ============================== */
+.aside{position:sticky;top:20px}
+.win{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r-win);
+  overflow:hidden;box-shadow:var(--shadow-3)}
+.win .chrome{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--appbg)}
+.win .chrome .cd{display:flex;gap:7px}
+.win .chrome .cd i{width:11px;height:11px;border-radius:50%;display:block}
+.win .chrome .cd i:nth-child(1){background:var(--corail)}
+.win .chrome .cd i:nth-child(2){background:var(--magenta)}
+.win .chrome .cd i:nth-child(3){background:var(--violet)}
+.win .chrome .ttl{font-family:var(--font-title);font-size:12px;color:var(--t3);letter-spacing:.04em}
+
+/* Mini-maquette (wireframe live) */
+.mock{padding:16px;background:var(--deep);min-height:210px;max-height:340px;overflow-y:auto}
+.mock.light{background:#EEF0F7}
+.mk{border-radius:8px;margin-bottom:9px;padding:10px 12px;position:relative;overflow:hidden;border:1px solid transparent}
+.mock:not(.light) .mk{background:#20233440;border-color:#2c314980}
+.mock.light .mk{background:#ffffff;border-color:#dfe3ee;box-shadow:0 1px 3px rgba(30,20,60,.06)}
+.mk .mk-t{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.mock:not(.light) .mk .mk-t{color:var(--t3)}
+.mock.light .mk .mk-t{color:#8a8fb0}
+.mk .bar{height:6px;border-radius:4px;margin-top:7px}
+.mock:not(.light) .mk .bar{background:#333a55}
+.mock.light .mk .bar{background:#e4e7f2}
+.mk .bar.w70{width:70%} .mk .bar.w45{width:45%} .mk .bar.w90{width:90%}
+.mk.hero{background:var(--accent-grad,var(--grad-warm))!important;border:none;padding:18px 14px}
+.mk.hero .mk-t{color:rgba(255,255,255,.85)}
+.mk.hero .bar{background:rgba(255,255,255,.55)}
+.mk-bento{display:grid;grid-template-columns:2fr 1fr;grid-auto-rows:26px;gap:6px;margin-top:8px}
+.mk-bento i{border-radius:6px;display:block}
+.mock:not(.light) .mk-bento i{background:#2c3149}
+.mock.light .mk-bento i{background:#eef1f8}
+.mk-bento i:nth-child(1){grid-row:span 2}
+.mk-bento i.accent{background:var(--accent-grad,var(--grad-warm))}
+.mk-cards{display:flex;gap:6px;margin-top:8px}
+.mk-cards i{flex:1;height:30px;border-radius:6px}
+.mock:not(.light) .mk-cards i{background:#2c3149}
+.mock.light .mk-cards i{background:#eef1f8}
+.mk-cards i.accent{background:var(--accent-grad,var(--grad-warm))}
+.mk .dot{width:20px;height:20px;border-radius:50%;background:var(--accent-grad,var(--grad-warm));display:inline-block;vertical-align:middle;margin-right:8px}
+
+/* Sortie prompt */
+.output{margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-panel);overflow:hidden}
+.output .ohead{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.output .ohead .otitle{font-family:var(--font-title);font-weight:600;font-size:14px;color:var(--t1);display:flex;align-items:center;gap:9px}
+.output .ohead .otitle .dot{width:9px;height:9px;border-radius:50%;background:var(--grad-warm);box-shadow:0 0 10px var(--magenta)}
+#prompt{
+  font-family:"SF Mono",ui-monospace,"Menlo",monospace;font-size:12.5px;line-height:1.7;color:var(--t2);
+  background:var(--deep);padding:16px;white-space:pre-wrap;word-break:break-word;max-height:360px;overflow-y:auto;
+}
+#prompt .p-em{color:var(--lavande)}
+#prompt .p-param{color:var(--rose);font-weight:600}
+.obar{display:flex;gap:10px;padding:14px 16px;border-top:1px solid var(--border);background:var(--appbg)}
+.btn{font-family:var(--font-title);font-weight:600;font-size:13.5px;border:none;border-radius:var(--r-pill);
+  padding:12px 20px;cursor:pointer;transition:.16s;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn-primary{background:var(--grad-warm);color:#fff;flex:1;box-shadow:0 6px 20px rgba(192,38,211,.35)}
+.btn-primary:hover{box-shadow:var(--glow);transform:translateY(-1px)}
+.btn-primary:active{transform:scale(.97)}
+.btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--t1);border-color:var(--lavande);background:var(--cardhi)}
+.wordcount{font-size:11px;color:var(--t3);text-align:right;padding:0 16px 12px;background:var(--appbg)}
+
+footer{text-align:center;padding:8px 0 46px;color:var(--t3);font-size:12px}
+footer .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:var(--font-title);font-weight:600}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:999px;border:3px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:var(--lavande);background-clip:padding-box;border:3px solid transparent}
+
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);
+  background:var(--grad-warm);color:#fff;font-family:var(--font-title);font-weight:600;font-size:14px;
+  padding:13px 24px;border-radius:var(--r-pill);box-shadow:var(--glow);z-index:50;transition:.28s cubic-bezier(.2,.9,.3,1);opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===================== HÉRO ===================== -->
+  <header>
+    <div class="brandline">
+      <span class="dots"><span></span><span></span><span></span></span>
+      <span class="kicker">Aurora · Design Prompt Framework</span>
+    </div>
+    <div class="hero">
+      <h1>Studio de Prompts</h1>
+      <p class="lead">Configurez, section par section, le prompt d'une interface premium — puis copiez-le dans Midjourney, Nano Banana ou tout générateur d'images.</p>
+      <p class="sub">Basé sur le <em>Design Prompt Framework</em> : un canevas fixe qui produit des prompts complets, cohérents et reproductibles — plutôt que de simples listes de mots-clés.</p>
+    </div>
+
+    <div class="presets" id="presets">
+      <span class="plabel">Presets</span>
+    </div>
+  </header>
+
+  <!-- ===================== GRILLE ===================== -->
+  <div class="layout">
+
+    <!-- ============ COLONNE CONTRÔLES ============ -->
+    <main>
+
+      <!-- 01 — Brief -->
+      <section class="panel">
+        <div class="phead"><div><div class="num">01 — Brief</div><h2>Type, cible &amp; objectif</h2></div></div>
+        <p class="hint">Le socle du prompt. Décrivez ce que l'image doit représenter avant même l'esthétique.</p>
+        <div class="field">
+          <label class="lbl" for="appType">Type d'application / de site</label>
+          <input type="text" id="appType" list="appTypeList" placeholder="ex. plateforme SaaS d'analyse IA, app fintech mobile, portfolio…">
+          <datalist id="appTypeList"></datalist>
+        </div>
+        <div class="field">
+          <label class="lbl" for="audience">Utilisateurs cibles <span class="opt">— optionnel</span></label>
+          <input type="text" id="audience" list="audienceList" placeholder="ex. équipes produit B2B, créateurs, dirigeants…">
+          <datalist id="audienceList"></datalist>
+        </div>
+        <div class="field">
+          <label class="lbl" for="goal">Objectif métier <span class="opt">— optionnel</span></label>
+          <input type="text" id="goal" list="goalList" placeholder="ex. présenter un produit, convertir, rassurer…">
+          <datalist id="goalList"></datalist>
+        </div>
+      </section>
+
+      <!-- 02 — Architecture UX -->
+      <section class="panel">
+        <div class="phead"><div><div class="num">02 — Architecture UX</div><h2>Structure de l'expérience</h2></div></div>
+        <p class="hint">Comment l'information est organisée à l'échelle de la page.</p>
+        <div class="cardgrid" id="archGrid"></div>
+      </section>
+
+      <!-- 03 — Layout -->
+      <section class="panel">
+        <div class="phead"><div><div class="num">03 — Layout</div><h2>Système de mise en page</h2></div></div>
+        <p class="hint">Choix multiple — la grille et la répartition des blocs.</p>
+        <div class="chips" id="layoutChips"></div>
+      </section>
+
+      <!-- 04 — Style graphique -->
+      <section class="panel">
+        <div class="phead"><div><div class="num">04 — Style graphique</div><h2>Direction esthétique</h2></div></div>
+        <p class="hint">Le langage visuel. Restez cohérent : 1 à 3 styles compatibles suffisent.</p>
+        <div class="chips" id="styleChips"></div>
+      </section>
+
+      <!-- 05 — Composants -->
+      <section class="panel">
+        <div class="phead"><div><div class="num">05 — Composants</div><h2>Éléments d'interface</h2></div></div>
+        <p class="hint">Ce que l'on doit voir dans la maquette. Décrire la composition aide énormément le rendu.</p>
+        <div class="chips" id="compChips"></div>
+      </section>
+
+      <!-- 06 — Palette -->
+      <section class="panel">
+        <div class="phead"><div><div class="num">06 — Palette</div><h2>Couleurs &amp; ambiance</h2></div></div>
+        <div class="field toggle-row">
+          <div class="tl">Mode <small>Clair ou sombre</small></div>
+          <div class="seg" id="modeSeg">
+            <button data-mode="dark" class="on">Sombre</button>
+            <button data-mode="light">Clair</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="lbl">Palette d'accent</label>
+          <div class="palgrid" id="palGrid"></div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="customAccent">Accent personnalisé <span class="opt">— texte libre, optionnel</span></label>
+          <input type="text" id="customAccent" placeholder="ex. bleu électrique, vert émeraude, monochrome…">
+        </div>
+      </section>
+
+      <!-- 07 — Références -->
+      <section class="panel">
+        <div class="phead"><div><div class="num">07 — Références visuelles</div><h2>Inspirations</h2></div></div>
+        <p class="hint">« Comme … » — Midjourney comprend très bien ces repères de marque.</p>
+        <div class="chips" id="refChips"></div>
+      </section>
+
+      <!-- 08 — Qualité -->
+      <section class="panel">
+        <div class="phead"><div><div class="num">08 — Qualité</div><h2>Niveau de finition</h2></div></div>
+        <p class="hint">Les marqueurs de qualité qui poussent le moteur vers un rendu « pro ».</p>
+        <div class="chips" id="qualChips"></div>
+      </section>
+
+      <!-- 09 — Structure narrative (advanced) -->
+      <section class="panel" id="secPanel">
+        <div class="phead collapse-head" id="secToggle">
+          <div><div class="num">09 — Structure narrative <span class="opt" style="color:var(--t3)">· avancé</span></div><h2>Composition section par section</h2></div>
+          <span class="caret">▾</span>
+        </div>
+        <div class="collapse-body">
+          <p class="hint">Midjourney rend mieux quand il comprend la composition. Décrivez l'enchaînement des sections (mode « Structuré »).</p>
+          <div class="sec-list" id="secList"></div>
+          <button class="sec-add" id="secAdd">+ Ajouter une section</button>
+        </div>
+      </section>
+
+      <!-- 10 — Paramètres Midjourney -->
+      <section class="panel">
+        <div class="phead"><div><div class="num">10 — Paramètres</div><h2>Réglages du moteur</h2></div></div>
+        <p class="hint">Paramètres Midjourney v7 (compatibles v6.1). Survolez les échelles pour vous situer.</p>
+
+        <div class="field">
+          <label class="lbl">Format <code style="color:var(--t3)">--ar</code></label>
+          <div class="chips" id="arChips"></div>
+        </div>
+
+        <div class="slider-row">
+          <div class="sr-top"><span class="sr-name">Stylisation <code>--stylize</code></span><span class="sr-val" id="stylizeVal">200</span></div>
+          <input type="range" id="stylize" min="0" max="1000" step="10" value="200">
+          <div class="sr-scale"><span>0 · littéral</span><span>100 · défaut</span><span>1000 · artistique</span></div>
+        </div>
+
+        <div class="slider-row">
+          <div class="sr-top"><span class="sr-name">Chaos <code>--chaos</code></span><span class="sr-val" id="chaosVal">10</span></div>
+          <input type="range" id="chaos" min="0" max="100" step="1" value="10">
+          <div class="sr-scale"><span>0 · cohérent</span><span>50</span><span>100 · varié</span></div>
+        </div>
+
+        <div class="slider-row">
+          <div class="sr-top"><span class="sr-name">Weird <code>--weird</code></span><span class="sr-val" id="weirdVal">0</span></div>
+          <input type="range" id="weird" min="0" max="3000" step="50" value="0">
+          <div class="sr-scale"><span>0 · classique</span><span>1500</span><span>3000 · surréaliste</span></div>
+        </div>
+
+        <div class="field toggle-row" style="margin-top:6px">
+          <div class="tl">Version du moteur</div>
+          <select id="version" style="width:auto;min-width:120px">
+            <option value="7" selected>--v 7</option>
+            <option value="6.1">--v 6.1</option>
+            <option value="6">--v 6</option>
+            <option value="niji 6">--niji 6</option>
+          </select>
+        </div>
+        <div class="field toggle-row">
+          <div class="tl">Mode Raw <small>Retire le style par défaut, adhère au prompt (idéal UI)</small></div>
+          <label class="switch"><input type="checkbox" id="rawMode" checked><span class="track"></span></label>
+        </div>
+        <div class="field">
+          <label class="lbl" for="noField">Exclure <code style="color:var(--t3)">--no</code> <span class="opt">— optionnel</span></label>
+          <input type="text" id="noField" placeholder="ex. text, logo, watermark, people">
+        </div>
+        <div class="field">
+          <label class="lbl" for="srefField">Style de référence <code style="color:var(--t3)">--sref</code> <span class="opt">— URL(s) ou code, optionnel</span></label>
+          <input type="text" id="srefField" placeholder="ex. https://… ou un code de style">
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ============ COLONNE APERÇU (sticky) ============ -->
+    <aside class="aside">
+      <div class="win">
+        <div class="chrome">
+          <span class="cd"><i></i><i></i><i></i></span>
+          <span class="ttl" id="mockTitle">aperçu · composition</span>
+        </div>
+        <div class="mock" id="mock"></div>
+      </div>
+
+      <div class="output">
+        <div class="ohead">
+          <div class="otitle"><span class="dot"></span> Prompt généré</div>
+          <div class="seg" id="outSeg">
+            <button data-out="structured" class="on">Structuré</button>
+            <button data-out="keywords">Mots-clés</button>
+          </div>
+        </div>
+        <div id="prompt"></div>
+        <div class="wordcount" id="wordcount"></div>
+        <div class="obar">
+          <button class="btn btn-primary" id="copyBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="#fff" stroke-width="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+            Copier le prompt
+          </button>
+          <button class="btn btn-ghost" id="resetBtn">Réinitialiser</button>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>Généré avec le <span class="g">Design Prompt Framework</span> · Charte visuelle Aurora v1.0 — 2026</footer>
+</div>
+
+<div class="toast" id="toast">Prompt copié ✓</div>
+
+<script>
+/* ============================================================
+   DONNÉES — chaque option : {id, fr (affiché), mj (mot-clé EN injecté)}
+   Midjourney rend mieux en anglais avec un vocabulaire "design".
+   ============================================================ */
+const DATA = {
+  appTypes:["Plateforme SaaS d'analyse IA","Landing page produit","App fintech mobile","Dashboard analytics","Portfolio créatif","Site e-commerce premium","Plateforme d'entreprise B2B","Application santé","Réseau social","Outil de productivité"],
+  audiences:["équipes produit B2B","dirigeants & décideurs","créateurs & designers","développeurs","grand public premium","startups tech","clients entreprise"],
+  goals:["présenter un produit","convertir les visiteurs","raconter une histoire","rassurer & crédibiliser","démontrer une expertise","générer des leads"],
+
+  architecture:[
+    {id:"one-page",fr:"One Page",fr2:"Défilement continu",mj:"One Page scrolling experience"},
+    {id:"story",fr:"Interactive Story",fr2:"Récit immersif",mj:"Interactive Story website, immersive vertical storytelling"},
+    {id:"dashboard",fr:"Dashboard",fr2:"Tableau de bord",mj:"enterprise dashboard interface"},
+    {id:"multipage",fr:"Multi-page",fr2:"Site classique",mj:"multi-page website structure"},
+    {id:"landing",fr:"Landing",fr2:"Page d'atterrissage",mj:"premium landing page"},
+    {id:"mobile",fr:"App mobile",fr2:"Écrans mobiles",mj:"mobile app interface, iOS screens"},
+  ],
+
+  layouts:[
+    {id:"bento",fr:"Bento Grid",mj:"Bento Grid layout"},
+    {id:"swiss",fr:"Swiss Grid",mj:"clean Swiss grid system"},
+    {id:"split",fr:"Split Screen",mj:"split screen layout"},
+    {id:"magazine",fr:"Magazine",mj:"editorial magazine layout"},
+    {id:"asym",fr:"Asymétrique",mj:"asymmetric modern layout"},
+    {id:"fullbleed",fr:"Full-bleed",mj:"full-bleed immersive sections"},
+    {id:"cards",fr:"Grille de cartes",mj:"modular card grid"},
+    {id:"whitespace",fr:"Ultra whitespace",mj:"ultra clean whitespace, spacious layout"},
+  ],
+
+  styles:[
+    {id:"glass",fr:"Glassmorphism",mj:"Glassmorphism UI, floating translucent cards, glass reflections"},
+    {id:"minimal",fr:"Minimal",mj:"minimal design"},
+    {id:"aurora",fr:"Aurora Gradients",mj:"aurora gradients, mesh gradient background, soft ambient lighting"},
+    {id:"material",fr:"Material 3",mj:"Material 3 design"},
+    {id:"neu",fr:"Neumorphism",mj:"neumorphism, soft tactile UI"},
+    {id:"darklux",fr:"Dark Luxury",mj:"dark luxury mode, subtle neon glow, layered depth"},
+    {id:"editorial",fr:"Editorial Type",mj:"large editorial typography"},
+    {id:"brutalist",fr:"Neo-brutalism",mj:"neo-brutalist bold interface"},
+    {id:"skeuo",fr:"3D / Realism",mj:"soft 3D realism, photorealistic depth"},
+    {id:"mono",fr:"Monochrome",mj:"minimal monochrome interface"},
+  ],
+
+  components:[
+    {id:"hero",fr:"Hero plein écran",mj:"fullscreen hero section"},
+    {id:"nav",fr:"Nav flottante",mj:"floating navigation bar"},
+    {id:"cards",fr:"Cartes",mj:"floating cards"},
+    {id:"charts",fr:"Graphiques",mj:"modern analytics charts and widgets"},
+    {id:"tables",fr:"Tableaux",mj:"clean data tables"},
+    {id:"timeline",fr:"Timeline",mj:"interactive timeline"},
+    {id:"dashprev",fr:"Aperçu dashboard",mj:"premium dashboard preview"},
+    {id:"pricing",fr:"Pricing",mj:"pricing cards"},
+    {id:"testi",fr:"Témoignages",mj:"customer testimonials"},
+    {id:"kpi",fr:"KPIs / métriques",mj:"key metrics band with large numbers"},
+    {id:"forms",fr:"Formulaires",mj:"elegant form components"},
+    {id:"icons",fr:"Iconographie",mj:"elegant iconography"},
+    {id:"illus",fr:"Illustrations",mj:"modern illustrations"},
+  ],
+
+  references:[
+    {id:"apple",fr:"Apple HIG",mj:"Apple Human Interface Guidelines inspired"},
+    {id:"linear",fr:"Linear",mj:"Linear.app aesthetic"},
+    {id:"stripe",fr:"Stripe",mj:"Stripe inspired layouts"},
+    {id:"vercel",fr:"Vercel",mj:"Vercel elegance"},
+    {id:"notion",fr:"Notion",mj:"Notion simplicity"},
+    {id:"figma",fr:"Figma UI",mj:"Figma design system"},
+    {id:"framer",fr:"Framer",mj:"Framer motion aesthetic"},
+    {id:"vision",fr:"Vision Pro",mj:"Apple Vision Pro inspired interface"},
+  ],
+
+  quality:[
+    {id:"premium",fr:"Premium",mj:"premium SaaS, luxury digital experience"},
+    {id:"awwwards",fr:"Awwwards",mj:"Awwwards winner"},
+    {id:"behance",fr:"Behance",mj:"Behance featured"},
+    {id:"dribbble",fr:"Dribbble",mj:"Dribbble trending"},
+    {id:"pixel",fr:"Pixel Perfect",mj:"pixel perfect UI"},
+    {id:"detail",fr:"Ultra détaillé",mj:"highly detailed"},
+    {id:"realistic",fr:"Ultra réaliste",mj:"ultra realistic web interface mockup"},
+    {id:"cinematic",fr:"Cinématique",mj:"cinematic composition, dramatic lighting"},
+  ],
+
+  sectionTypes:[
+    {id:"hero",fr:"Hero plein écran + nav flottante",mj:"Fullscreen hero with floating navigation and animated headline"},
+    {id:"problem",fr:"Problème / contexte (cartes info)",mj:"Problem statement with infographic cards"},
+    {id:"solution",fr:"Solution (Bento Grid)",mj:"Solution overview using a Bento Grid"},
+    {id:"features",fr:"Fonctionnalités (cartes glassmorphism)",mj:"Interactive feature cards with glassmorphism"},
+    {id:"dashboard",fr:"Aperçu dashboard analytics",mj:"Analytics dashboard preview with modern widgets"},
+    {id:"timeline",fr:"Timeline du workflow",mj:"Timeline explaining the workflow"},
+    {id:"stats",fr:"Chiffres clés",mj:"Key metrics band with large gradient numbers"},
+    {id:"testimonials",fr:"Témoignages clients",mj:"Customer testimonials"},
+    {id:"gallery",fr:"Galerie média",mj:"Media gallery with soft shadows"},
+    {id:"pricing",fr:"Grille tarifaire",mj:"Pricing cards"},
+    {id:"cta",fr:"Appel à l'action",mj:"Bold call to action section"},
+    {id:"footer",fr:"Footer élégant",mj:"Elegant footer"},
+  ],
+
+  aspectRatios:[
+    {id:"16:9",fr:"16:9 · Desktop"},
+    {id:"3:2",fr:"3:2 · Large"},
+    {id:"4:3",fr:"4:3 · Classique"},
+    {id:"1:1",fr:"1:1 · Carré"},
+    {id:"9:16",fr:"9:16 · Mobile"},
+    {id:"21:9",fr:"21:9 · Ultra-wide"},
+  ],
+
+  palettes:[
+    {id:"aurora",fr:"Aurora",colors:["#7C3AED","#C026D3","#EC4899"],mj:"violet to magenta to rose aurora gradient palette"},
+    {id:"slate",fr:"Blanc & Slate",colors:["#F8FAFC","#94A3B8","#334155"],mj:"white and slate color palette"},
+    {id:"electric",fr:"Bleu électrique",colors:["#0F172A","#2563EB","#38BDF8"],mj:"monochrome dark interface with electric blue accents"},
+    {id:"emerald",fr:"Émeraude",colors:["#052E2B","#10B981","#6EE7B7"],mj:"deep emerald green accents"},
+    {id:"sunset",fr:"Coucher de soleil",colors:["#7C3AED","#FB7185","#FBBF24"],mj:"warm sunset mesh gradient, coral and amber"},
+    {id:"mono",fr:"Monochrome",colors:["#111111","#555555","#EEEEEE"],mj:"minimal monochrome black and white palette"},
+  ],
+};
+
+/* ============================================================
+   PRESETS
+   ============================================================ */
+const PRESETS = {
+  premium:{
+    name:"Premium SaaS",
+    appType:"Plateforme SaaS d'analyse IA", audience:"équipes produit B2B", goal:"présenter un produit",
+    architecture:"story", layouts:["bento","swiss","whitespace"], styles:["glass","aurora","editorial"],
+    components:["hero","nav","cards","dashprev","charts"], references:["apple","linear","stripe","figma"],
+    quality:["premium","awwwards","pixel","realistic"], mode:"dark", palette:"aurora", customAccent:"",
+    sections:["hero","problem","solution","features","dashboard","timeline","testimonials","pricing","cta","footer"],
+    ar:"16:9", stylize:200, chaos:8, weird:0, version:"7", raw:true, no:"", sref:"",
+  },
+  futuristic:{
+    name:"Futuriste · Aurora",
+    appType:"Plateforme IA nouvelle génération", audience:"clients entreprise", goal:"raconter une histoire",
+    architecture:"story", layouts:["bento","fullbleed"], styles:["glass","aurora","darklux"],
+    components:["hero","nav","dashprev","charts","kpi"], references:["vision","linear","figma"],
+    quality:["awwwards","behance","dribbble","realistic","cinematic"], mode:"dark", palette:"aurora", customAccent:"subtle neon glow",
+    sections:["hero","solution","features","dashboard","stats","cta","footer"],
+    ar:"16:9", stylize:300, chaos:12, weird:0, version:"7", raw:false, no:"", sref:"",
+  },
+  apple:{
+    name:"Apple · Notion · Linear",
+    appType:"Dashboard d'entreprise premium", audience:"dirigeants & décideurs", goal:"rassurer & crédibiliser",
+    architecture:"story", layouts:["bento","swiss","whitespace"], styles:["minimal","glass","editorial"],
+    components:["hero","cards","timeline","charts","icons"], references:["apple","notion","linear","vercel","figma"],
+    quality:["premium","awwwards","detail"], mode:"light", palette:"slate", customAccent:"soft depth",
+    sections:["hero","problem","solution","features","timeline","testimonials","cta","footer"],
+    ar:"16:9", stylize:150, chaos:5, weird:0, version:"7", raw:true, no:"", sref:"",
+  },
+  story:{
+    name:"Storytelling cinématique",
+    appType:"Landing page produit", audience:"grand public premium", goal:"raconter une histoire",
+    architecture:"story", layouts:["swiss","fullbleed","magazine"], styles:["minimal","aurora","editorial"],
+    components:["hero","illus","kpi","testi","timeline"], references:["apple","stripe","framer"],
+    quality:["awwwards","realistic","cinematic","detail"], mode:"dark", palette:"sunset", customAccent:"mesh gradients, glass reflections",
+    sections:["hero","problem","solution","features","stats","testimonials","cta","footer"],
+    ar:"16:9", stylize:250, chaos:10, weird:0, version:"7", raw:false, no:"", sref:"",
+  },
+  dashboard:{
+    name:"Dashboard Analytics",
+    appType:"Dashboard analytics SaaS", audience:"équipes produit B2B", goal:"démontrer une expertise",
+    architecture:"dashboard", layouts:["bento","cards","swiss"], styles:["glass","darklux","minimal"],
+    components:["nav","charts","tables","kpi","cards","dashprev"], references:["linear","vercel","figma","stripe"],
+    quality:["premium","pixel","detail","realistic"], mode:"dark", palette:"electric", customAccent:"electric blue accents",
+    sections:["hero","dashboard","stats","features","footer"],
+    ar:"16:9", stylize:180, chaos:6, weird:0, version:"7", raw:true, no:"text, watermark", sref:"",
+  },
+};
+
+/* ============================================================
+   ÉTAT
+   ============================================================ */
+const DEFAULTS = {
+  appType:"", audience:"", goal:"",
+  architecture:"one-page",
+  layouts:new Set(), styles:new Set(), components:new Set(), references:new Set(), quality:new Set(),
+  mode:"dark", palette:"aurora", customAccent:"",
+  sections:[],
+  ar:"16:9", stylize:200, chaos:10, weird:0, version:"7", raw:true, no:"", sref:"",
+  outputMode:"structured", activePreset:null,
+};
+let state = structuredClone ? {...DEFAULTS, layouts:new Set(),styles:new Set(),components:new Set(),references:new Set(),quality:new Set()} : Object.assign({},DEFAULTS);
+
+/* ============================================================
+   CONSTRUCTION DE L'UI
+   ============================================================ */
+const $ = s=>document.querySelector(s);
+const el = (t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+
+// datalists
+function fillDatalist(id,arr){const dl=$(id);arr.forEach(v=>{const o=document.createElement('option');o.value=v;dl.appendChild(o);});}
+fillDatalist("#appTypeList",DATA.appTypes);
+fillDatalist("#audienceList",DATA.audiences);
+fillDatalist("#goalList",DATA.goals);
+
+// icônes géométriques pour l'architecture (formes, pas d'emoji)
+const ARCH_ICON={
+  "one-page":'<svg viewBox="0 0 24 24" fill="none"><rect x="6" y="3" width="12" height="18" rx="2" stroke="#fff" stroke-width="1.7"/><path d="M9 8h6M9 12h6M9 16h4" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>',
+  "story":'<svg viewBox="0 0 24 24" fill="none"><path d="M5 4v16M5 6h8l-1.5 3L13 12H5" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/><circle cx="17" cy="16" r="3" stroke="#fff" stroke-width="1.7"/></svg>',
+  "dashboard":'<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke="#fff" stroke-width="1.7"/><rect x="13" y="3" width="8" height="5" rx="1.5" stroke="#fff" stroke-width="1.7"/><rect x="13" y="10" width="8" height="11" rx="1.5" stroke="#fff" stroke-width="1.7"/><rect x="3" y="13" width="8" height="8" rx="1.5" stroke="#fff" stroke-width="1.7"/></svg>',
+  "multipage":'<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="14" height="14" rx="2" stroke="#fff" stroke-width="1.7"/><path d="M8 6V4a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-2" stroke="#fff" stroke-width="1.7"/></svg>',
+  "landing":'<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="2" stroke="#fff" stroke-width="1.7"/><path d="M4 9h16" stroke="#fff" stroke-width="1.7"/><path d="M8 14h8" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>',
+  "mobile":'<svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2.5" stroke="#fff" stroke-width="1.7"/><path d="M10.5 18.5h3" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>',
+};
+
+// Architecture cards
+const archGrid=$("#archGrid");
+DATA.architecture.forEach(a=>{
+  const b=el("button","pick");
+  b.innerHTML=`<span class="ico">${ARCH_ICON[a.id]||''}</span><span><span class="pt">${a.fr}</span><span class="pd">${a.fr2}</span></span>`;
+  b.onclick=()=>{state.architecture=a.id;clearPreset();syncArch();updateAll();};
+  b.dataset.id=a.id;
+  archGrid.appendChild(b);
+});
+function syncArch(){[...archGrid.children].forEach(b=>b.classList.toggle("on",b.dataset.id===state.architecture));}
+
+// Générateur de chips multi-select
+function buildChips(container,list,setKey){
+  const c=$(container);c.innerHTML="";
+  list.forEach(o=>{
+    const ch=el("span","chip",o.fr);ch.dataset.id=o.id;
+    ch.onclick=()=>{const s=state[setKey];s.has(o.id)?s.delete(o.id):s.add(o.id);clearPreset();ch.classList.toggle("on");updateAll();};
+    c.appendChild(ch);
+  });
+}
+buildChips("#layoutChips",DATA.layouts,"layouts");
+buildChips("#styleChips",DATA.styles,"styles");
+buildChips("#compChips",DATA.components,"components");
+buildChips("#refChips",DATA.references,"references");
+buildChips("#qualChips",DATA.quality,"quality");
+function syncChips(container,setKey){[...$(container).children].forEach(ch=>ch.classList.toggle("on",state[setKey].has(ch.dataset.id)));}
+
+// AR chips (single select)
+const arC=$("#arChips");
+DATA.aspectRatios.forEach(a=>{
+  const ch=el("span","chip",a.fr);ch.dataset.id=a.id;
+  ch.onclick=()=>{state.ar=a.id;clearPreset();syncAR();updateAll();};
+  arC.appendChild(ch);
+});
+function syncAR(){[...arC.children].forEach(ch=>ch.classList.toggle("on",ch.dataset.id===state.ar));}
+
+// Palettes
+const palGrid=$("#palGrid");
+DATA.palettes.forEach(p=>{
+  const d=el("div","palpick");d.dataset.id=p.id;
+  d.innerHTML=`<div class="swatch">${p.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</div><div class="pn">${p.fr}</div>`;
+  d.onclick=()=>{state.palette=p.id;clearPreset();syncPal();updateAll();};
+  palGrid.appendChild(d);
+});
+function syncPal(){[...palGrid.children].forEach(d=>d.classList.toggle("on",d.dataset.id===state.palette));}
+
+// Mode segment
+$("#modeSeg").querySelectorAll("button").forEach(b=>{
+  b.onclick=()=>{state.mode=b.dataset.mode;clearPreset();syncMode();updateAll();};
+});
+function syncMode(){$("#modeSeg").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.mode===state.mode));}
+
+// Output segment
+$("#outSeg").querySelectorAll("button").forEach(b=>{
+  b.onclick=()=>{state.outputMode=b.dataset.out;$("#outSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));updatePrompt();};
+});
+
+// Text inputs
+$("#appType").oninput=e=>{state.appType=e.target.value;clearPreset();updatePrompt();};
+$("#audience").oninput=e=>{state.audience=e.target.value;clearPreset();updatePrompt();};
+$("#goal").oninput=e=>{state.goal=e.target.value;clearPreset();updatePrompt();};
+$("#customAccent").oninput=e=>{state.customAccent=e.target.value;clearPreset();updatePrompt();};
+$("#noField").oninput=e=>{state.no=e.target.value;clearPreset();updatePrompt();};
+$("#srefField").oninput=e=>{state.sref=e.target.value;clearPreset();updatePrompt();};
+
+// Sliders
+function bindSlider(id,key,valId){
+  const s=$("#"+id);
+  s.oninput=e=>{state[key]=+e.target.value;$("#"+valId).textContent=e.target.value;clearPreset();updatePrompt();};
+}
+bindSlider("stylize","stylize","stylizeVal");
+bindSlider("chaos","chaos","chaosVal");
+bindSlider("weird","weird","weirdVal");
+
+$("#version").onchange=e=>{state.version=e.target.value;clearPreset();updatePrompt();};
+$("#rawMode").onchange=e=>{state.raw=e.target.checked;clearPreset();updatePrompt();};
+
+// Collapse section narrative
+$("#secToggle").onclick=()=>$("#secPanel").classList.toggle("collapsed");
+
+// Sections narratives
+const secList=$("#secList");
+function renderSections(){
+  secList.innerHTML="";
+  state.sections.forEach((sid,i)=>{
+    const row=el("div","sec-item");
+    const sel=document.createElement("select");
+    DATA.sectionTypes.forEach(st=>{const o=document.createElement("option");o.value=st.id;o.textContent=st.fr;if(st.id===sid)o.selected=true;sel.appendChild(o);});
+    sel.onchange=e=>{state.sections[i]=e.target.value;clearPreset();updateAll();};
+    const del=el("button","del","×");del.title="Retirer";
+    del.onclick=()=>{state.sections.splice(i,1);clearPreset();updateAll();};
+    row.appendChild(el("span","idx",String(i+1)));
+    row.appendChild(sel);
+    row.appendChild(del);
+    secList.appendChild(row);
+  });
+}
+$("#secAdd").onclick=()=>{state.sections.push("features");clearPreset();updateAll();};
+
+/* ============================================================
+   PRESETS UI
+   ============================================================ */
+const presetsBar=$("#presets");
+Object.entries(PRESETS).forEach(([key,p])=>{
+  const b=el("button","preset",p.name);b.dataset.key=key;
+  b.onclick=()=>applyPreset(key);
+  presetsBar.appendChild(b);
+});
+function applyPreset(key){
+  const p=PRESETS[key];
+  state.appType=p.appType; state.audience=p.audience; state.goal=p.goal;
+  state.architecture=p.architecture;
+  state.layouts=new Set(p.layouts); state.styles=new Set(p.styles);
+  state.components=new Set(p.components); state.references=new Set(p.references);
+  state.quality=new Set(p.quality);
+  state.mode=p.mode; state.palette=p.palette; state.customAccent=p.customAccent;
+  state.sections=[...p.sections];
+  state.ar=p.ar; state.stylize=p.stylize; state.chaos=p.chaos; state.weird=p.weird;
+  state.version=p.version; state.raw=p.raw; state.no=p.no; state.sref=p.sref;
+  state.activePreset=key;
+  syncFormFromState();
+  updateAll();
+}
+function clearPreset(){state.activePreset=null;syncPresetBar();}
+function syncPresetBar(){[...presetsBar.querySelectorAll(".preset")].forEach(b=>b.classList.toggle("active",b.dataset.key===state.activePreset));}
+
+/* Rétablir l'état visuel de tous les contrôles depuis state */
+function syncFormFromState(){
+  $("#appType").value=state.appType; $("#audience").value=state.audience; $("#goal").value=state.goal;
+  $("#customAccent").value=state.customAccent; $("#noField").value=state.no; $("#srefField").value=state.sref;
+  $("#stylize").value=state.stylize; $("#stylizeVal").textContent=state.stylize;
+  $("#chaos").value=state.chaos; $("#chaosVal").textContent=state.chaos;
+  $("#weird").value=state.weird; $("#weirdVal").textContent=state.weird;
+  $("#version").value=state.version; $("#rawMode").checked=state.raw;
+  syncArch(); syncAR(); syncPal(); syncMode();
+  syncChips("#layoutChips","layouts"); syncChips("#styleChips","styles");
+  syncChips("#compChips","components"); syncChips("#refChips","references"); syncChips("#qualChips","quality");
+  renderSections(); syncPresetBar();
+}
+
+/* ============================================================
+   HELPERS de sélection -> mots-clés
+   ============================================================ */
+const byId=(arr,id)=>arr.find(x=>x.id===id);
+const mjList=(arr,set)=>[...set].map(id=>byId(arr,id)?.mj).filter(Boolean);
+const frList=(arr,set)=>[...set].map(id=>byId(arr,id)?.fr).filter(Boolean);
+
+/* ============================================================
+   APERÇU (wireframe live)
+   ============================================================ */
+const ACCENT_GRAD={
+  aurora:"linear-gradient(135deg,#7C3AED,#C026D3,#EC4899)",
+  slate:"linear-gradient(135deg,#64748B,#94A3B8)",
+  electric:"linear-gradient(135deg,#2563EB,#38BDF8)",
+  emerald:"linear-gradient(135deg,#10B981,#6EE7B7)",
+  sunset:"linear-gradient(135deg,#7C3AED,#FB7185,#FBBF24)",
+  mono:"linear-gradient(135deg,#333,#888)",
+};
+function renderPreview(){
+  const mock=$("#mock");
+  mock.className="mock"+(state.mode==="light"?" light":"");
+  mock.style.setProperty("--accent-grad",ACCENT_GRAD[state.palette]||ACCENT_GRAD.aurora);
+  $("#mockTitle").textContent = (byId(DATA.architecture,state.architecture)?.fr||"aperçu")+" · composition";
+  const secs = state.sections.length ? state.sections : ["hero","features","footer"];
+  const useBento = state.layouts.has("bento");
+  mock.innerHTML="";
+  secs.forEach(sid=>{
+    const st=byId(DATA.sectionTypes,sid); if(!st)return;
+    const blk=el("div","mk");
+    if(sid==="hero"){
+      blk.classList.add("hero");
+      blk.innerHTML=`<div class="mk-t">Hero</div><div class="bar w70"></div><div class="bar w45"></div>`;
+    } else if(sid==="solution"||(sid==="features"&&useBento)){
+      blk.innerHTML=`<div class="mk-t">${st.fr.split("(")[0]}</div><div class="mk-bento"><i class="accent"></i><i></i><i></i><i></i></div>`;
+    } else if(sid==="dashboard"){
+      blk.innerHTML=`<div class="mk-t">Dashboard</div><div class="mk-bento"><i class="accent"></i><i></i><i></i><i></i></div>`;
+    } else if(sid==="features"||sid==="pricing"||sid==="testimonials"){
+      blk.innerHTML=`<div class="mk-t">${st.fr}</div><div class="mk-cards"><i></i><i class="accent"></i><i></i></div>`;
+    } else if(sid==="stats"){
+      blk.innerHTML=`<div class="mk-t">Chiffres clés</div><div class="mk-cards"><i class="accent"></i><i class="accent"></i><i class="accent"></i></div>`;
+    } else if(sid==="cta"){
+      blk.innerHTML=`<div style="display:flex;align-items:center"><span class="dot"></span><div style="flex:1"><div class="bar w45" style="margin-top:0"></div></div></div>`;
+    } else {
+      blk.innerHTML=`<div class="mk-t">${st.fr}</div><div class="bar w90"></div>`;
+    }
+    mock.appendChild(blk);
+  });
+}
+
+/* ============================================================
+   GÉNÉRATION DU PROMPT
+   ============================================================ */
+function paletteMj(){
+  const p=byId(DATA.palettes,state.palette);
+  const parts=[];
+  if(state.mode==="light") parts.push("clean light interface"); else parts.push("dark interface");
+  if(p) parts.push(p.mj);
+  if(state.customAccent.trim()) parts.push(state.customAccent.trim());
+  return parts;
+}
+function buildParams(){
+  const p=[];
+  p.push(`--ar ${state.ar}`);
+  if(state.stylize!==100) p.push(`--stylize ${state.stylize}`);
+  if(state.chaos>0) p.push(`--chaos ${state.chaos}`);
+  if(state.weird>0) p.push(`--weird ${state.weird}`);
+  if(state.raw && !state.version.startsWith("niji")) p.push(`--style raw`);
+  if(state.no.trim()) p.push(`--no ${state.no.trim()}`);
+  if(state.sref.trim()) p.push(`--sref ${state.sref.trim()}`);
+  p.push(state.version.startsWith("niji")?`--${state.version}`:`--v ${state.version}`);
+  return p.join(" ");
+}
+
+function generateKeywords(){
+  const parts=[];
+  const arch=byId(DATA.architecture,state.architecture);
+  const head = state.appType.trim()
+      ? `Award-winning ${state.appType.trim().toLowerCase()}${state.audience.trim()?` for ${state.audience.trim()}`:""}`
+      : "Award-winning premium web interface";
+  parts.push(head);
+  if(arch) parts.push(arch.mj);
+  mjList(DATA.layouts,state.layouts).forEach(x=>parts.push(x));
+  mjList(DATA.styles,state.styles).forEach(x=>parts.push(x));
+  const comps=mjList(DATA.components,state.components);
+  if(comps.length) parts.push("featuring "+comps.join(", "));
+  paletteMj().forEach(x=>parts.push(x));
+  mjList(DATA.references,state.references).forEach(x=>parts.push(x));
+  mjList(DATA.quality,state.quality).forEach(x=>parts.push(x));
+  const body = parts.join(", ");
+  return {body, params:buildParams()};
+}
+
+function generateStructured(){
+  const arch=byId(DATA.architecture,state.architecture);
+  const lines=[];
+  // Phrase d'ouverture
+  const opener = state.appType.trim()
+      ? `Award-winning ${state.appType.trim().toLowerCase()} website.`
+      : `Award-winning premium web interface.`;
+  lines.push(opener);
+  const ctx=[];
+  if(state.audience.trim()) ctx.push(`Target users: ${state.audience.trim()}`);
+  if(state.goal.trim()) ctx.push(`Goal: ${state.goal.trim()}`);
+  if(ctx.length) lines.push(ctx.join(". ")+".");
+  if(arch) lines.push(arch.mj.charAt(0).toUpperCase()+arch.mj.slice(1)+".");
+  lines.push("");
+  // Sections
+  const secs=state.sections.length?state.sections:null;
+  if(secs){
+    secs.forEach((sid,i)=>{
+      const st=byId(DATA.sectionTypes,sid);
+      if(st) lines.push(`Section ${i+1}: ${st.mj}.`);
+    });
+    lines.push("");
+  }
+  // Direction visuelle
+  const dir=[];
+  mjList(DATA.layouts,state.layouts).forEach(x=>dir.push(x));
+  mjList(DATA.styles,state.styles).forEach(x=>dir.push(x));
+  const comps=mjList(DATA.components,state.components);
+  if(comps.length) dir.push(comps.join(", "));
+  paletteMj().forEach(x=>dir.push(x));
+  mjList(DATA.references,state.references).forEach(x=>dir.push(x));
+  mjList(DATA.quality,state.quality).forEach(x=>dir.push(x));
+  if(dir.length) lines.push(dir.join(", ")+".");
+  return {body:lines.join("\n"), params:buildParams()};
+}
+
+function updatePrompt(){
+  const gen = state.outputMode==="keywords"?generateKeywords():generateStructured();
+  const full = gen.body + "\n\n" + gen.params;
+  // Rendu coloré (params en rose)
+  const promptEl=$("#prompt");
+  const esc = s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  let html = esc(gen.body);
+  const paramsHtml = esc(gen.params).replace(/(--[a-z0-9]+(?:\.[0-9]+)?)/gi,'<span class="p-param">$1</span>');
+  promptEl.innerHTML = html + "\n\n" + paramsHtml;
+  promptEl.dataset.raw = full;
+  const words = full.trim().split(/\s+/).length;
+  $("#wordcount").textContent = `${words} mots · ${full.length} caractères`;
+}
+
+function updateAll(){renderSections();renderPreview();updatePrompt();syncPresetBar();}
+
+/* ============================================================
+   COPIER / RÉINITIALISER
+   ============================================================ */
+$("#copyBtn").onclick=()=>{
+  const txt=$("#prompt").dataset.raw||"";
+  const done=()=>showToast("Prompt copié ✓");
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(()=>fallbackCopy(txt,done));
+  } else fallbackCopy(txt,done);
+};
+function fallbackCopy(txt,cb){
+  const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(e){}
+  document.body.removeChild(ta);cb&&cb();
+}
+let toastT;
+function showToast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),1800);}
+
+$("#resetBtn").onclick=()=>{
+  state={...DEFAULTS, layouts:new Set(),styles:new Set(),components:new Set(),references:new Set(),quality:new Set(), sections:[]};
+  state.outputMode = $("#outSeg .on")?.dataset.out || "structured";
+  syncFormFromState();
+  updateAll();
+  showToast("Réinitialisé");
+};
+
+/* ============================================================
+   INIT — on démarre sur le preset "Premium SaaS"
+   ============================================================ */
+applyPreset("premium");
+</script>
+</body>
+</html>
