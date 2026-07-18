@@ -198,13 +198,29 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 .dz-inner svg{width:26px;height:26px;color:var(--lavande);opacity:.85;margin-bottom:2px}
 .dz-inner .dz-main{font-size:13px;color:var(--t2)} .dz-inner .dz-main b{color:var(--lavande)}
 .dz-inner small{font-size:11px;color:var(--t3)}
-.dz-result{display:flex;align-items:center;gap:12px;margin-top:11px;background:var(--deep);border:1px solid var(--border);border-radius:var(--r-card);padding:10px}
+.dz-result{margin-top:11px;background:var(--deep);border:1px solid var(--border);border-radius:var(--r-card);padding:12px}
+.dz-top{display:flex;align-items:flex-start;gap:12px}
 .dz-result img{width:52px;height:52px;object-fit:cover;border-radius:9px;flex:0 0 auto;border:1px solid var(--border)}
-.dz-swatches{display:flex;gap:6px;flex:1;flex-wrap:wrap}
-.dz-swatches span{width:28px;height:28px;border-radius:7px;border:1px solid rgba(255,255,255,.16);cursor:pointer;transition:.15s;position:relative}
-.dz-swatches span:hover{transform:translateY(-2px)}
+.dz-swatches{display:flex;gap:11px;flex:1;flex-wrap:wrap;padding-top:4px}
+.sw{position:relative;width:46px}
+.sw-color{appearance:none;-webkit-appearance:none;width:46px;height:38px;border:1px solid rgba(255,255,255,.16);border-radius:8px;padding:0;cursor:pointer;background:none;transition:.15s}
+.sw-color:hover{transform:translateY(-2px)}
+.sw-color::-webkit-color-swatch-wrapper{padding:0}
+.sw-color::-webkit-color-swatch{border:none;border-radius:7px}
+.sw-color::-moz-color-swatch{border:none;border-radius:7px}
+.sw-lock{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:1px solid var(--border);background:var(--card);color:var(--t3);display:grid;place-items:center;cursor:pointer;padding:0;transition:.15s;line-height:0}
+.sw-lock svg{width:11px;height:11px}
+.sw-lock:hover{color:var(--t1);border-color:var(--lavande)}
+.sw.locked .sw-lock{background:var(--grad-warm);color:#fff;border-color:transparent}
+.sw-hex{display:block;text-align:center;font-family:var(--font-title);font-size:9px;color:var(--t3);margin-top:5px;letter-spacing:.02em;cursor:pointer}
+.sw-hex:hover{color:var(--lavande)}
 .dz-clear{background:none;border:1px solid var(--border);color:var(--t3);font-size:11px;border-radius:var(--r-pill);padding:7px 13px;cursor:pointer;font-family:var(--font-title);font-weight:500;flex:0 0 auto;transition:.15s}
 .dz-clear:hover{color:var(--corail);border-color:var(--corail)}
+.dz-count{display:flex;align-items:center;gap:12px;margin-top:15px}
+.dz-count-lbl{font-size:12px;color:var(--t2);font-weight:600;white-space:nowrap}
+.dz-count input[type=range]{flex:1}
+.dz-count-val{font-family:var(--font-title);font-weight:600;font-size:13px;color:var(--lavande);width:14px;text-align:right}
+.dz-help{font-size:11px;color:var(--t3);margin-top:10px;line-height:1.45}
 
 /* Sections narratives (advanced) */
 .sec-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
@@ -400,9 +416,17 @@ footer .g{background:var(--grad);-webkit-background-clip:text;background-clip:te
             </div>
           </label>
           <div class="dz-result" id="dzResult" hidden>
-            <img id="dzThumb" alt="aperçu de l'image">
-            <div class="dz-swatches" id="dzSwatches"></div>
-            <button type="button" class="dz-clear" id="dzClear">Retirer</button>
+            <div class="dz-top">
+              <img id="dzThumb" alt="aperçu de l'image">
+              <div class="dz-swatches" id="dzSwatches"></div>
+              <button type="button" class="dz-clear" id="dzClear">Retirer</button>
+            </div>
+            <div class="dz-count">
+              <span class="dz-count-lbl">Couleurs dominantes</span>
+              <input type="range" id="colorCount" min="3" max="6" step="1" value="5">
+              <span class="dz-count-val" id="colorCountVal">5</span>
+            </div>
+            <p class="dz-help">Cliquez une pastille pour l'ajuster · le cadenas la conserve lors d'un nouveau réglage du nombre de couleurs.</p>
           </div>
         </div>
         <div class="field">
@@ -819,9 +843,12 @@ DATA.palettes.forEach(p=>{
 function syncPal(){[...palGrid.children].forEach(d=>d.classList.toggle("on",d.dataset.id===state.palette));}
 
 /* ---- Extraction de palette depuis une image (100% client, sans dépendance) ---- */
-const dz={zone:$("#dropzone"),input:$("#imgInput"),result:$("#dzResult"),thumb:$("#dzThumb"),sw:$("#dzSwatches"),clear:$("#dzClear")};
+const dz={zone:$("#dropzone"),input:$("#imgInput"),result:$("#dzResult"),thumb:$("#dzThumb"),sw:$("#dzSwatches"),clear:$("#dzClear"),count:$("#colorCount"),countVal:$("#colorCountVal")};
+dz.swatches=[]; dz.lastData=null;
 const colorDist=(a,b)=>Math.sqrt((a[0]-b[0])**2+(a[1]-b[1])**2+(a[2]-b[2])**2);
-const toHex=v=>"#"+v.map(x=>Math.max(0,Math.min(255,x)).toString(16).padStart(2,"0")).join("");
+const toHex=v=>"#"+v.map(x=>Math.max(0,Math.min(255,Math.round(x))).toString(16).padStart(2,"0")).join("");
+const hexToRgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+
 // Quantification par coupe médiane (median-cut) puis tri par dominance
 function extractPalette(data,n=5){
   const pix=[];
@@ -840,12 +867,14 @@ function extractPalette(data,n=5){
   const boxes=cut(pix,4); // jusqu'à 16 boîtes
   const cols=boxes.filter(b=>b.length).map(b=>{
     const a=[0,0,0]; for(const q of b){a[0]+=q[0];a[1]+=q[1];a[2]+=q[2];}
-    const l=b.length; return {rgb:[Math.round(a[0]/l),Math.round(a[1]/l),Math.round(a[2]/l)],count:l};
+    const l=b.length; return {rgb:[a[0]/l,a[1]/l,a[2]/l],count:l};
   }).sort((x,y)=>y.count-x.count);
   const out=[];
-  for(const c of cols){ if(out.every(o=>colorDist(o,c.rgb)>26)) out.push(c.rgb); if(out.length>=n) break; }
-  return out.map(toHex);
+  for(const c of cols){ if(out.every(o=>colorDist(hexToRgb(o),c.rgb)>26)) out.push(toHex(c.rgb)); if(out.length>=n) break; }
+  while(out.length<n && cols.length){ out.push(toHex(cols[out.length%cols.length].rgb)); } // pad si l'image est très unie
+  return out.slice(0,n);
 }
+
 function handleImage(file){
   if(!file||!file.type||!file.type.startsWith("image/")){showToast("Fichier image invalide");return;}
   const reader=new FileReader();
@@ -857,11 +886,12 @@ function handleImage(file){
       const cv=document.createElement("canvas"); cv.width=w; cv.height=h;
       const ctx=cv.getContext("2d",{willReadFrequently:true}); ctx.drawImage(img,0,0,w,h);
       let data; try{ data=ctx.getImageData(0,0,w,h).data; }catch(err){ showToast("Image illisible"); return; }
-      const colors=extractPalette(data,5);
+      dz.lastData=data;
+      const n=+dz.count.value;
+      dz.swatches=extractPalette(data,n).map(hex=>({hex,locked:false}));
       dz.thumb.src=e.target.result;
-      dz.sw.innerHTML=colors.map(c=>`<span style="background:${c}" title="${c} — cliquer pour copier" data-hex="${c}"></span>`).join("");
       dz.result.hidden=false;
-      setCustomPalette(colors);
+      renderSwatches(); commitCustom();
       showToast("Palette extraite ✓");
     };
     img.onerror=()=>showToast("Image illisible");
@@ -869,29 +899,78 @@ function handleImage(file){
   };
   reader.readAsDataURL(file);
 }
-function setCustomPalette(colors){
-  state.customColors=colors;
+
+// Recalcul quand on change le nombre de couleurs — les pastilles verrouillées sont conservées
+function recompute(n){
+  if(!dz.lastData) return;
+  const locked=dz.swatches.filter(s=>s.locked);
+  let fresh=extractPalette(dz.lastData, Math.min(8, n+locked.length))
+              .filter(hex=>locked.every(l=>colorDist(hexToRgb(hex),hexToRgb(l.hex))>26));
+  const result=[];
+  for(const s of dz.swatches){ if(s.locked && result.length<n) result.push(s); }
+  let fi=0;
+  while(result.length<n && fi<fresh.length){ result.push({hex:fresh[fi++],locked:false}); }
+  while(result.length<n){ result.push({hex:"#888888",locked:false}); }
+  dz.swatches=result.slice(0,n);
+  renderSwatches(); commitCustom();
+}
+
+const LOCK_OPEN='<svg viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 7.5-1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+const LOCK_CLOSED='<svg viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+function renderSwatches(){
+  dz.sw.innerHTML=dz.swatches.map((s,i)=>
+    `<div class="sw${s.locked?' locked':''}" data-i="${i}">`
+    +`<input type="color" class="sw-color" value="${s.hex}" aria-label="Couleur ${i+1}">`
+    +`<button type="button" class="sw-lock" title="${s.locked?'Déverrouiller':'Verrouiller cette couleur'}">${s.locked?LOCK_CLOSED:LOCK_OPEN}</button>`
+    +`<span class="sw-hex" title="Copier ${s.hex}">${s.hex}</span></div>`
+  ).join("");
+}
+
+function commitCustom(){
+  state.customColors=dz.swatches.map(s=>s.hex);
   let pick=palGrid.querySelector('.palpick[data-id="custom"]');
   if(!pick){
     pick=el("div","palpick custom"); pick.dataset.id="custom";
     pick.onclick=()=>{state.palette="custom";clearPreset();syncPal();updateAll();};
     palGrid.insertBefore(pick,palGrid.firstChild);
   }
-  pick.innerHTML=`<div class="swatch">${colors.map(c=>`<i style="background:${c}"></i>`).join("")}</div><div class="pn">Mon image</div>`;
+  pick.innerHTML=`<div class="swatch">${state.customColors.map(c=>`<i style="background:${c}"></i>`).join("")}</div><div class="pn">Mon image</div>`;
   state.palette="custom"; clearPreset(); syncPal(); updateAll();
 }
+
 function removeCustomPalette(){
   const pick=palGrid.querySelector('.palpick[data-id="custom"]'); if(pick) pick.remove();
-  state.customColors=null; dz.result.hidden=true; dz.thumb.removeAttribute("src"); dz.sw.innerHTML=""; dz.input.value="";
+  dz.swatches=[]; dz.lastData=null; state.customColors=null;
+  dz.result.hidden=true; dz.thumb.removeAttribute("src"); dz.sw.innerHTML=""; dz.input.value="";
+  dz.count.value=5; dz.countVal.textContent="5";
   if(state.palette==="custom"){ state.palette="aurora"; syncPal(); updateAll(); }
 }
+
+// Bindings
 dz.input.onchange=e=>{ if(e.target.files&&e.target.files[0]) handleImage(e.target.files[0]); };
 dz.clear.onclick=e=>{ e.preventDefault(); removeCustomPalette(); };
+dz.count.oninput=e=>{ dz.countVal.textContent=e.target.value; recompute(+e.target.value); };
 ["dragenter","dragover"].forEach(ev=>dz.zone.addEventListener(ev,e=>{e.preventDefault();dz.zone.classList.add("drag");}));
 ["dragleave","drop"].forEach(ev=>dz.zone.addEventListener(ev,e=>{e.preventDefault();dz.zone.classList.remove("drag");}));
 dz.zone.addEventListener("drop",e=>{ const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0]; if(f) handleImage(f); });
-dz.sw.addEventListener("click",e=>{ const s=e.target.closest("span[data-hex]"); if(!s)return;
-  const hex=s.dataset.hex; if(navigator.clipboard) navigator.clipboard.writeText(hex).then(()=>showToast(hex+" copié ✓")).catch(()=>{}); });
+// Édition en direct d'une pastille (sans re-render pour ne pas fermer le sélecteur natif) — l'édition la verrouille
+dz.sw.addEventListener("input",e=>{
+  const c=e.target.closest(".sw-color"); if(!c)return;
+  const box=c.closest(".sw"), i=+box.dataset.i;
+  dz.swatches[i].hex=c.value; dz.swatches[i].locked=true;
+  box.classList.add("locked");
+  const lock=box.querySelector(".sw-lock"); if(lock){lock.innerHTML=LOCK_CLOSED; lock.title="Déverrouiller";}
+  const hx=box.querySelector(".sw-hex"); if(hx){hx.textContent=c.value; hx.title="Copier "+c.value;}
+  commitCustom();
+});
+// Verrou (toggle) ou copie du code hex
+dz.sw.addEventListener("click",e=>{
+  const lock=e.target.closest(".sw-lock");
+  if(lock){ const i=+lock.closest(".sw").dataset.i; dz.swatches[i].locked=!dz.swatches[i].locked; renderSwatches(); return; }
+  const hx=e.target.closest(".sw-hex");
+  if(hx){ const t=hx.textContent; if(navigator.clipboard) navigator.clipboard.writeText(t).then(()=>showToast(t+" copié ✓")).catch(()=>{}); }
+});
 
 // Mode segment
 $("#modeSeg").querySelectorAll("button").forEach(b=>{
@@ -1168,7 +1247,9 @@ function showToast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("s
 
 $("#resetBtn").onclick=()=>{
   const pick=palGrid.querySelector('.palpick[data-id="custom"]'); if(pick) pick.remove();
+  dz.swatches=[]; dz.lastData=null;
   dz.result.hidden=true; dz.thumb.removeAttribute("src"); dz.sw.innerHTML=""; dz.input.value="";
+  dz.count.value=5; dz.countVal.textContent="5";
   state={...DEFAULTS, layouts:new Set(),styles:new Set(),components:new Set(),references:new Set(),quality:new Set(), sections:[], customColors:null};
   state.outputMode = $("#outSeg .on")?.dataset.out || "structured";
   syncFormFromState();
