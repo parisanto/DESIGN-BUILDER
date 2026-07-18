@@ -360,6 +360,7 @@ footer .g{background:var(--grad);-webkit-background-clip:text;background-clip:te
       <!-- 06 — Palette -->
       <section class="panel">
         <div class="phead"><div><div class="num">06 — Palette</div><h2>Couleurs &amp; ambiance</h2></div></div>
+        <p class="hint">Palettes dérivées des Design Models : Aurora, Midnight Executive, Praxis Social &amp; Neuro (inclusif / sketch).</p>
         <div class="field toggle-row">
           <div class="tl">Mode <small>Clair ou sombre</small></div>
           <div class="seg" id="modeSeg">
@@ -535,6 +536,10 @@ const DATA = {
     {id:"brutalist",fr:"Neo-brutalism",mj:"neo-brutalist bold interface"},
     {id:"skeuo",fr:"3D / Realism",mj:"soft 3D realism, photorealistic depth"},
     {id:"mono",fr:"Monochrome",mj:"minimal monochrome interface"},
+    {id:"narrative",fr:"Editorial narratif",mj:"editorial storytelling layout, serif display headings, refined typographic hierarchy, alternating light and dark sections"},
+    {id:"humanist",fr:"Humaniste pastel",mj:"warm humanist illustration style, editorial pastel palette, organic background shapes, soft hand-crafted imagery"},
+    {id:"handdrawn",fr:"Dessiné main",mj:"hand-drawn imperfect linework, sketch doodles, paper grain texture, warm friendly illustration"},
+    {id:"inclusive",fr:"Inclusif / accessible",mj:"clean accessible interface, high legibility, calm rounded cards, thin outline icons, generous spacing"},
   ],
 
   components:[
@@ -551,6 +556,9 @@ const DATA = {
     {id:"forms",fr:"Formulaires",mj:"elegant form components"},
     {id:"icons",fr:"Iconographie",mj:"elegant iconography"},
     {id:"illus",fr:"Illustrations",mj:"modern illustrations"},
+    {id:"doodles",fr:"Doodles flottants",mj:"floating hand-drawn doodles: lightbulbs, gears, constellations"},
+    {id:"orgshape",fr:"Formes organiques",mj:"organic warm color shapes behind hero visuals"},
+    {id:"breadcrumb",fr:"Fil d'Ariane",mj:"rounded breadcrumb step navigation"},
   ],
 
   references:[
@@ -606,6 +614,11 @@ const DATA = {
     {id:"emerald",fr:"Émeraude",colors:["#052E2B","#10B981","#6EE7B7"],mj:"deep emerald green accents"},
     {id:"sunset",fr:"Coucher de soleil",colors:["#7C3AED","#FB7185","#FBBF24"],mj:"warm sunset mesh gradient, coral and amber"},
     {id:"mono",fr:"Monochrome",colors:["#111111","#555555","#EEEEEE"],mj:"minimal monochrome black and white palette"},
+    {id:"midnight",fr:"Midnight Executive",colors:["#1E2761","#12152E","#F96167"],mj:"deep navy and ink background with a single coral accent, editorial contrast"},
+    {id:"terracotta",fr:"Terracotta humaniste",colors:["#FBF6EF","#C1652F","#3E4A5B"],mj:"warm ivory background with terracotta and slate accents, humanist editorial palette"},
+    {id:"sepia",fr:"Sépia confort",colors:["#FDF6E3","#B4884D","#3E4A5B"],mj:"sepia cream comfort palette, warm low-fatigue tones, soft on the eyes"},
+    {id:"sketch",fr:"Sketch moutarde",colors:["#F4F1EA","#F0B23A","#2B2F3A"],mj:"muted slate and warm paper tones with a single mustard accent, hand-drawn editorial palette, never pure white"},
+    {id:"inclusive",fr:"Bleu · violet clair",colors:["#F8FAFC","#2563EB","#9333EA"],mj:"clean light interface with blue to violet gradient accents, accessible SaaS palette"},
   ],
 };
 
@@ -657,6 +670,36 @@ const PRESETS = {
     quality:["premium","pixel","detail","realistic"], mode:"dark", palette:"electric", customAccent:"electric blue accents",
     sections:["hero","dashboard","stats","features","footer"],
     ar:"16:9", stylize:180, chaos:6, weird:0, version:"7", raw:true, no:"text, watermark", sref:"",
+  },
+  midnight:{
+    name:"Midnight Executive",
+    appType:"One-page narratif pédagogique", audience:"apprenants & professionnels", goal:"raconter une histoire",
+    architecture:"story", layouts:["swiss","whitespace","magazine"], styles:["narrative","minimal","editorial"],
+    components:["hero","nav","kpi","timeline","cards"], references:["stripe","linear","vercel"],
+    quality:["premium","awwwards","detail","realistic"], mode:"dark", palette:"midnight",
+    customAccent:"single coral accent, Georgia serif headings, alternating section backgrounds",
+    sections:["hero","problem","stats","solution","features","timeline","cta","footer"],
+    ar:"16:9", stylize:180, chaos:6, weird:0, version:"7", raw:true, no:"", sref:"",
+  },
+  praxis:{
+    name:"Praxis Social",
+    appType:"Bibliothèque de prompts pour travailleurs sociaux", audience:"travailleurs sociaux", goal:"rassurer & crédibiliser",
+    architecture:"one-page", layouts:["swiss","cards","whitespace"], styles:["humanist","minimal","editorial"],
+    components:["hero","cards","orgshape","illus","icons"], references:["notion","apple"],
+    quality:["premium","detail","realistic"], mode:"light", palette:"terracotta",
+    customAccent:"Spectral serif titles, warm pastel editorial illustration, floral organic shapes",
+    sections:["hero","problem","solution","features","testimonials","cta","footer"],
+    ar:"3:2", stylize:160, chaos:5, weird:0, version:"7", raw:true, no:"", sref:"",
+  },
+  neuro:{
+    name:"Neuro · Sketch inclusif",
+    appType:"App éducative pour ados neuroatypiques", audience:"adolescents DYS / TDAH / TSA", goal:"démontrer une expertise",
+    architecture:"one-page", layouts:["cards","whitespace"], styles:["handdrawn","inclusive","humanist"],
+    components:["hero","doodles","cards","illus","breadcrumb"], references:["notion"],
+    quality:["detail","realistic"], mode:"light", palette:"sketch",
+    customAccent:"single mustard accent, floating doodles, paper grain, benevolent characters",
+    sections:["hero","problem","solution","features","cta","footer"],
+    ar:"4:3", stylize:200, chaos:8, weird:0, version:"7", raw:false, no:"clinical icons, medical cross, rainbow gradient", sref:"",
   },
 };
 
@@ -853,6 +896,11 @@ const ACCENT_GRAD={
   emerald:"linear-gradient(135deg,#10B981,#6EE7B7)",
   sunset:"linear-gradient(135deg,#7C3AED,#FB7185,#FBBF24)",
   mono:"linear-gradient(135deg,#333,#888)",
+  midnight:"linear-gradient(135deg,#1E2761,#F96167)",
+  terracotta:"linear-gradient(135deg,#C1652F,#3E4A5B)",
+  sepia:"linear-gradient(135deg,#B4884D,#C97C4F)",
+  sketch:"linear-gradient(135deg,#F0B23A,#C97C4F)",
+  inclusive:"linear-gradient(135deg,#2563EB,#9333EA)",
 };
 function renderPreview(){
   const mock=$("#mock");
