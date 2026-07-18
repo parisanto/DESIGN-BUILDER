@@ -309,6 +309,77 @@ footer .g{background:var(--grad);-webkit-background-clip:text;background-clip:te
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:999px;border:3px solid transparent;background-clip:padding-box}
 ::-webkit-scrollbar-thumb:hover{background:var(--lavande);background-clip:padding-box;border:3px solid transparent}
 
+/* Sélecteur de piste & type de document */
+.section-label{font-family:var(--font-title);font-weight:600;font-size:13px;letter-spacing:.02em;color:var(--t2);margin:26px 0 12px;display:flex;align-items:center;gap:9px}
+.section-label b{font-family:var(--font-title);color:#fff;background:var(--grad-warm);width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;flex:0 0 auto}
+.trackswitch{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.trackswitch{grid-template-columns:1fr}}
+.trackcard{text-align:left;background:linear-gradient(180deg,var(--card),#212539);border:1px solid var(--border);border-radius:var(--r-panel);padding:16px 18px;cursor:pointer;transition:.16s;display:flex;gap:13px;align-items:center;width:100%}
+.trackcard:hover{border-color:var(--lavande);background:var(--cardhi)}
+.trackcard.on{border-color:transparent;box-shadow:0 0 0 1.5px var(--violet) inset,0 10px 30px rgba(124,58,237,.28);background:linear-gradient(135deg,rgba(124,58,237,.26),rgba(236,72,153,.16))}
+.trackcard .ti{flex:0 0 auto;width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--deep);border:1px solid var(--border)}
+.trackcard.on .ti{background:var(--grad-warm);border-color:transparent}
+.trackcard .ti svg{width:22px;height:22px}
+.trackcard .tt{font-family:var(--font-title);font-weight:600;font-size:15px;color:var(--t1)}
+.trackcard .td{font-size:12px;color:var(--t3);margin-top:2px}
+.trackcard .tgt{margin-left:auto;font-size:11px;font-family:var(--font-title);color:var(--lavande);white-space:nowrap;align-self:flex-start}
+.doctypes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:640px){.doctypes{grid-template-columns:1fr}}
+
+/* Aperçu — fiche design system */
+.sheet-sw{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.sheet-sw i{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.14)}
+.mock.light .sheet-sw i{border-color:rgba(0,0,0,.08)}
+.sheet-type{display:flex;align-items:center;gap:14px;margin-top:8px}
+.sheet-type b{font-family:var(--font-title);font-size:30px;font-weight:700;line-height:1;background:var(--accent-grad,var(--grad-warm));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sheet-type span{flex:1;display:flex;flex-direction:column;gap:6px}
+.sheet-type .bar{margin:0}
+.sheet-comp{display:flex;align-items:center;gap:10px;margin-top:9px}
+.sheet-comp .pill{width:64px;height:22px;border-radius:999px;background:var(--accent-grad,var(--grad-warm))}
+.sheet-comp .pill.ghost{background:transparent;border:1px solid #3a3f57}
+.mock.light .sheet-comp .pill.ghost{border-color:#cdd3e6}
+.sheet-comp .box{width:44px;height:30px;border-radius:8px;background:#2c3149}
+.mock.light .sheet-comp .box{background:#eef1f8}
+
+/* Aperçu — moodboard */
+.mood-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:46px;gap:8px}
+.mood-grid i{border-radius:9px;display:block;background:#2c3149;overflow:hidden}
+.mock.light .mood-grid i{background:#fff;border:1px solid #e2e6f2}
+.mood-grid .mood-lg{grid-column:span 2;grid-row:span 2;background:var(--accent-grad,var(--grad-warm))}
+.mood-grid .mood-img{background:var(--accent-grad,var(--grad-warm));opacity:.82}
+.mood-grid .mood-sw{display:flex;flex-direction:column}
+.mood-grid .mood-sw u{flex:1}
+.mood-grid .mood-type{display:grid;place-items:center;font-family:var(--font-title);font-weight:700;font-size:22px;color:var(--t2)}
+.mock.light .mood-grid .mood-type{color:#4a4f6b}
+
+/* Aperçu — asset */
+.mock.asset{display:grid;place-items:center;min-height:260px}
+.asset-preview{width:100%;height:230px;border-radius:14px;position:relative;overflow:hidden;background:#20233a;display:grid;place-items:center}
+.mock.light .asset-preview{background:#fff}
+.asset-fill{position:absolute;inset:0;background:var(--accent-grad,var(--grad-warm))}
+.asset-mark{width:82px;height:82px;border-radius:22px;background:var(--accent-grad,var(--grad-warm));display:grid;place-items:center;z-index:1}
+.asset-mark .dot{width:36px;height:36px;background:rgba(255,255,255,.92);border-radius:10px;margin:0}
+.asset-pat{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px}
+.asset-pat i{border-radius:8px;background:var(--accent-grad,var(--grad-warm));opacity:.85}
+.asset-label{position:absolute;bottom:10px;left:12px;font-family:var(--font-title);font-size:12px;color:#fff;background:rgba(0,0,0,.45);padding:5px 11px;border-radius:999px;z-index:2}
+
+/* Flux — hériter du Design */
+.flow-panel{border-color:rgba(167,139,250,.42);background:linear-gradient(180deg,rgba(124,58,237,.10),#212539)}
+.flow-card{background:var(--deep);border:1px solid var(--border);border-radius:var(--r-card);padding:6px 14px;margin-bottom:13px}
+.fl-row{display:flex;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(58,63,87,.5)}
+.fl-row:last-child{border-bottom:none}
+.fl-k{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);width:74px;flex:0 0 auto;font-family:var(--font-title);font-weight:600}
+.fl-v{font-size:13px;color:var(--t1);min-width:0}
+.fl-v.empty{color:var(--t3);font-style:italic}
+.fl-sw{display:flex;gap:6px}
+.fl-sw i{width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,.14)}
+.fl-tags{display:flex;flex-wrap:wrap;gap:6px}
+.fl-tags b{font-size:11px;font-weight:500;color:var(--t2);background:var(--card);border:1px solid var(--border);border-radius:999px;padding:3px 9px}
+.flow-checks{display:flex;flex-wrap:wrap;gap:16px}
+.flowchk{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--t2);cursor:pointer;user-select:none}
+.flowchk input{width:16px;height:16px;accent-color:var(--violet);cursor:pointer}
+#flowBody{transition:opacity .18s}
+
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);
   background:var(--grad-warm);color:#fff;font-family:var(--font-title);font-weight:600;font-size:14px;
   padding:13px 24px;border-radius:var(--r-pill);box-shadow:var(--glow);z-index:50;transition:.28s cubic-bezier(.2,.9,.3,1);opacity:0}
@@ -326,8 +397,27 @@ footer .g{background:var(--grad);-webkit-background-clip:text;background-clip:te
     </div>
     <div class="hero">
       <h1>Studio de Prompts</h1>
-      <p class="lead">Configurez, section par section, le prompt d'une interface premium — puis copiez-le dans Midjourney, Nano Banana ou tout générateur d'images.</p>
-      <p class="sub">Basé sur le <em>Design Prompt Framework</em> : un canevas fixe qui produit des prompts complets, cohérents et reproductibles — plutôt que de simples listes de mots-clés.</p>
+      <p class="lead">Deux pistes : faites <b>concevoir vos documents de design par Claude</b> (moodboard, UI, design system) et <b>générer vos assets visuels par Midjourney</b> (illustrations, fonds, logos, icônes…).</p>
+      <p class="sub">Chaque tâche vers l'outil le plus adapté : Claude pour les fiches plates et structurées, Midjourney pour les images.</p>
+    </div>
+
+    <div class="section-label"><b>1</b> Que veux-tu produire ?</div>
+    <div class="trackswitch" id="trackSwitch">
+      <button type="button" class="trackcard" data-track="design">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#fff" stroke-width="1.7"/><path d="M3 9h18M9 9v12" stroke="#fff" stroke-width="1.7"/><circle cx="6" cy="6" r="1" fill="#fff"/></svg></span>
+        <span><span class="tt">Design → Claude</span><span class="td">Moodboard · UI Design · Design System</span></span>
+        <span class="tgt">brief à coller</span>
+      </button>
+      <button type="button" class="trackcard" data-track="asset">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="3" stroke="#fff" stroke-width="1.7"/><circle cx="8.5" cy="9" r="1.7" stroke="#fff" stroke-width="1.5"/><path d="M4 17l4.5-4 4 3.5L16 12l4 4.5" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span><span class="tt">Assets → Midjourney</span><span class="td">Illustration · fond · logo · icônes · motion</span></span>
+        <span class="tgt">prompt image</span>
+      </button>
+    </div>
+
+    <div id="docTypeRow">
+      <div class="section-label"><b>2</b> Type de document à faire générer par Claude</div>
+      <div class="doctypes" id="docTypes"></div>
     </div>
 
     <div class="presets" id="presets">
@@ -340,6 +430,7 @@ footer .g{background:var(--grad);-webkit-background-clip:text;background-clip:te
 
     <!-- ============ COLONNE CONTRÔLES ============ -->
     <main>
+      <div id="designPanels">
 
       <!-- 01 — Brief -->
       <section class="panel">
@@ -462,9 +553,83 @@ footer .g{background:var(--grad);-webkit-background-clip:text;background-clip:te
         </div>
       </section>
 
+      </div><!--/designPanels-->
+
+      <div id="assetPanels" hidden>
+
+        <!-- A0 — Flux depuis le Design -->
+        <section class="panel flow-panel">
+          <div class="phead"><div><div class="num">A0 — Flux</div><h2>Hériter du Design</h2></div></div>
+          <p class="hint">Les assets s'alimentent du document conçu côté Claude : type, cible, objectif, palette et style deviennent la matière du prompt Midjourney.</p>
+          <div class="field toggle-row">
+            <div class="tl">Alimenter depuis le Design <small>Cohérence avec votre moodboard / UI / design system</small></div>
+            <label class="switch"><input type="checkbox" id="assetInherit" checked><span class="track"></span></label>
+          </div>
+          <div id="flowBody">
+            <div class="flow-card" id="flowSummary"></div>
+            <div class="flow-checks">
+              <label class="flowchk"><input type="checkbox" id="inheritContext" checked><span>Type · cible · objectif</span></label>
+              <label class="flowchk"><input type="checkbox" id="inheritPalette" checked><span>Palette</span></label>
+              <label class="flowchk"><input type="checkbox" id="inheritStyle" checked><span>Style &amp; accent</span></label>
+            </div>
+          </div>
+        </section>
+
+        <!-- A1 — Type d'asset -->
+        <section class="panel">
+          <div class="phead"><div><div class="num">A1 — Type d'asset</div><h2>Que veut-on générer ?</h2></div></div>
+          <p class="hint">Chaque type ajuste automatiquement le format et les paramètres Midjourney adaptés.</p>
+          <div class="cardgrid" id="assetGrid"></div>
+        </section>
+
+        <!-- A2 — Sujet -->
+        <section class="panel">
+          <div class="phead"><div><div class="num">A2 — Sujet</div><h2>Description de l'image</h2></div></div>
+          <p class="hint">Décrivez le sujet en quelques mots (FR ou EN). Le style et la palette se règlent en dessous.</p>
+          <div class="field">
+            <label class="lbl" for="assetSubject">Sujet / contenu</label>
+            <textarea id="assetSubject" placeholder="ex. un renard stylisé qui lit un livre · vagues abstraites fluides · pictogrammes de finance…"></textarea>
+          </div>
+        </section>
+
+        <!-- A3 — Style visuel -->
+        <section class="panel">
+          <div class="phead"><div><div class="num">A3 — Style visuel</div><h2>Rendu graphique</h2></div></div>
+          <p class="hint">Choix multiple — 1 à 3 styles cohérents suffisent.</p>
+          <div class="chips" id="assetStyleChips"></div>
+        </section>
+
+        <!-- A4 — Ambiance -->
+        <section class="panel">
+          <div class="phead"><div><div class="num">A4 — Ambiance</div><h2>Mood</h2></div></div>
+          <div class="chips" id="assetMoodChips"></div>
+        </section>
+
+        <!-- A5 — Palette & fond -->
+        <section class="panel">
+          <div class="phead"><div><div class="num">A5 — Palette &amp; fond</div><h2>Couleurs &amp; arrière-plan</h2></div></div>
+          <p class="hint">Palette héritée du Design par défaut (voir A0). Décochez « Palette » dans le Flux pour choisir ici une palette propre à l'asset.</p>
+          <div class="field" id="assetPalField">
+            <label class="lbl">Palette</label>
+            <div class="chips" id="assetPalChips"></div>
+          </div>
+          <div class="field">
+            <label class="lbl" for="assetPaletteText">Couleurs libres <span class="opt">— optionnel</span></label>
+            <input type="text" id="assetPaletteText" placeholder="ex. corail &amp; crème, bleu nuit, pastel…">
+          </div>
+          <div class="field toggle-row">
+            <div class="tl">Arrière-plan</div>
+            <select id="assetBg" style="width:auto;min-width:160px"></select>
+          </div>
+          <div class="field toggle-row">
+            <div class="tl">Motif répétable <small>Ajoute <code style="color:var(--t3)">--tile</code> (texture / pattern sans couture)</small></div>
+            <label class="switch"><input type="checkbox" id="assetTile"><span class="track"></span></label>
+          </div>
+        </section>
+
       <!-- 10 — Paramètres Midjourney -->
       <section class="panel">
-        <div class="phead"><div><div class="num">10 — Paramètres</div><h2>Réglages du moteur</h2></div></div>
+        <div class="phead"><div><div class="num">A6 — Paramètres</div><h2>Réglages Midjourney</h2></div></div>
         <p class="hint">Paramètres Midjourney v7 (compatibles v6.1). Survolez les échelles pour vous situer.</p>
 
         <div class="field">
@@ -513,6 +678,8 @@ footer .g{background:var(--grad);-webkit-background-clip:text;background-clip:te
         </div>
       </section>
 
+      </div><!--/assetPanels-->
+
     </main>
 
     <!-- ============ COLONNE APERÇU (sticky) ============ -->
@@ -527,7 +694,7 @@ footer .g{background:var(--grad);-webkit-background-clip:text;background-clip:te
 
       <div class="output">
         <div class="ohead">
-          <div class="otitle"><span class="dot"></span> Prompt généré</div>
+          <div class="otitle" id="otitle"><span class="dot"></span> Prompt généré</div>
           <div class="seg" id="outSeg">
             <button data-out="structured" class="on">Structuré</button>
             <button data-out="keywords">Mots-clés</button>
@@ -677,6 +844,64 @@ const DATA = {
     {id:"sketch",fr:"Sketch moutarde",colors:["#F4F1EA","#F0B23A","#2B2F3A"],mj:"muted slate and warm paper tones with a single mustard accent, hand-drawn editorial palette, never pure white"},
     {id:"inclusive",fr:"Bleu · violet clair",colors:["#F8FAFC","#2563EB","#9333EA"],mj:"clean light interface with blue to violet gradient accents, accessible SaaS palette"},
   ],
+
+  /* ---- Piste DESIGN → Claude ---- */
+  docTypes:[
+    {id:"moodboard",fr:"Moodboard",fr2:"Planche d'inspiration"},
+    {id:"ui",fr:"UI Design",fr2:"Maquette d'interface"},
+    {id:"designsystem",fr:"Design System",fr2:"Fiche de style Figma"},
+  ],
+
+  /* ---- Piste ASSETS → Midjourney ---- */
+  assetTypes:[
+    {id:"illustration",fr:"Illustration",fr2:"Spot / éditoriale",ar:"1:1",sty:250},
+    {id:"background",fr:"Fond de site",fr2:"Arrière-plan",ar:"16:9",sty:150},
+    {id:"hero",fr:"Image hero",fr2:"Bannière large",ar:"16:9",sty:250},
+    {id:"logo",fr:"Logo",fr2:"Marque / symbole",ar:"1:1",sty:80},
+    {id:"iconset",fr:"Icônes",fr2:"Jeu d'icônes",ar:"1:1",sty:80},
+    {id:"texture",fr:"Texture",fr2:"Matière / grain",ar:"1:1",sty:120},
+    {id:"pattern",fr:"Pattern",fr2:"Motif répétable",ar:"1:1",sty:150},
+    {id:"motion",fr:"Motion / animé",fr2:"Frame vidéo",ar:"16:9",sty:250},
+    {id:"character",fr:"Personnage",fr2:"Mascotte / avatar",ar:"1:1",sty:250},
+  ],
+  assetStyles:[
+    {id:"flat",fr:"Flat vector",mj:"flat vector illustration, clean geometric shapes"},
+    {id:"line",fr:"Line art",mj:"minimal line art, thin consistent strokes"},
+    {id:"outline",fr:"Icône outline",mj:"outline icon style, uniform 2px rounded stroke, monoline pictogram"},
+    {id:"3d",fr:"3D render",mj:"soft 3D render, matte clay material, studio lighting"},
+    {id:"iso",fr:"Isométrique",mj:"isometric illustration, 2:1 dimetric"},
+    {id:"watercolor",fr:"Aquarelle",mj:"watercolor painting, soft washes, paper texture"},
+    {id:"gouache",fr:"Gouache",mj:"gouache painterly texture, visible brush strokes"},
+    {id:"mesh",fr:"Dégradé mesh",mj:"smooth gradient mesh, abstract fluid shapes, soft blur"},
+    {id:"riso",fr:"Risograph",mj:"risograph print, grainy texture, limited overprinted ink layers"},
+    {id:"papercut",fr:"Papier découpé",mj:"layered paper cut-out, soft drop shadows"},
+    {id:"clay",fr:"Claymorphism",mj:"claymorphism, soft rounded 3D, pastel colors"},
+    {id:"pixel",fr:"Pixel art",mj:"pixel art, 8-bit, crisp pixels"},
+    {id:"lowpoly",fr:"Low poly",mj:"low poly geometric, faceted"},
+    {id:"neon",fr:"Néon / glow",mj:"neon glow, luminous edges, dark background"},
+    {id:"sticker",fr:"Sticker",mj:"die-cut sticker, bold clean outline, glossy"},
+    {id:"duotone",fr:"Duotone",mj:"duotone two-color treatment"},
+    {id:"photoreal",fr:"Photoréaliste",mj:"photorealistic, highly detailed, natural lighting"},
+  ],
+  assetMoods:[
+    {id:"minimal",fr:"Minimal",mj:"minimal, lots of negative space"},
+    {id:"playful",fr:"Ludique",mj:"playful, friendly, rounded"},
+    {id:"corporate",fr:"Corporate",mj:"professional, corporate, trustworthy"},
+    {id:"dreamy",fr:"Onirique",mj:"dreamy, soft, ethereal"},
+    {id:"energetic",fr:"Énergique",mj:"energetic, dynamic, bold"},
+    {id:"calm",fr:"Calme",mj:"calm, serene, soft lighting"},
+    {id:"futuristic",fr:"Futuriste",mj:"futuristic, sleek, sci-fi"},
+    {id:"retro",fr:"Rétro",mj:"retro, vintage, nostalgic"},
+    {id:"luxury",fr:"Luxe",mj:"luxurious, elegant, premium"},
+    {id:"organic",fr:"Organique",mj:"organic, natural, botanical"},
+  ],
+  assetBg:[
+    {id:"plain",fr:"Blanc uni",mj:"on a plain solid white background",no:""},
+    {id:"transparent",fr:"Isolé (découpable)",mj:"isolated on plain white background, centered, no scenery",no:"background, scenery, shadow, floor"},
+    {id:"solid",fr:"Couleur unie",mj:"on a solid flat color background",no:""},
+    {id:"gradient",fr:"Dégradé",mj:"on a soft gradient background",no:""},
+    {id:"scene",fr:"Scène / contexte",mj:"in a contextual scene with soft depth of field",no:""},
+  ],
 };
 
 /* ============================================================
@@ -764,15 +989,23 @@ const PRESETS = {
    ÉTAT
    ============================================================ */
 const DEFAULTS = {
+  // pistes
+  track:"design", docType:"designsystem",
+  // piste design
   appType:"", audience:"", goal:"",
   architecture:"one-page",
   layouts:new Set(), styles:new Set(), components:new Set(), references:new Set(), quality:new Set(),
   mode:"dark", palette:"aurora", customColors:null, customAccent:"",
   sections:[],
-  ar:"16:9", stylize:200, chaos:10, weird:0, version:"7", raw:true, no:"", sref:"",
+  // piste assets (+ paramètres MJ partagés)
+  assetType:"illustration", assetSubject:"", assetStyles:new Set(), assetMood:new Set(),
+  assetInherit:true, inheritContext:true, inheritPalette:true, inheritStyle:true,
+  assetPalette:"aurora", assetPaletteText:"", assetBg:"plain", assetTile:false,
+  ar:"1:1", stylize:250, chaos:0, weird:0, version:"7", raw:true, no:"", sref:"",
   outputMode:"structured", activePreset:null,
 };
-let state = structuredClone ? {...DEFAULTS, layouts:new Set(),styles:new Set(),components:new Set(),references:new Set(),quality:new Set()} : Object.assign({},DEFAULTS);
+const freshSets=()=>({layouts:new Set(),styles:new Set(),components:new Set(),references:new Set(),quality:new Set(),assetStyles:new Set(),assetMood:new Set()});
+let state = {...DEFAULTS, ...freshSets()};
 
 /* ============================================================
    CONSTRUCTION DE L'UI
@@ -1043,8 +1276,6 @@ function applyPreset(key){
   state.quality=new Set(p.quality);
   state.mode=p.mode; state.palette=p.palette; state.customAccent=p.customAccent;
   state.sections=[...p.sections];
-  state.ar=p.ar; state.stylize=p.stylize; state.chaos=p.chaos; state.weird=p.weird;
-  state.version=p.version; state.raw=p.raw; state.no=p.no; state.sref=p.sref;
   state.activePreset=key;
   syncFormFromState();
   updateAll();
@@ -1064,6 +1295,130 @@ function syncFormFromState(){
   syncChips("#layoutChips","layouts"); syncChips("#styleChips","styles");
   syncChips("#compChips","components"); syncChips("#refChips","references"); syncChips("#qualChips","quality");
   renderSections(); syncPresetBar();
+}
+
+/* ============================================================
+   PISTES (Design → Claude / Assets → Midjourney)
+   ============================================================ */
+const DOC_ICON={
+  moodboard:'<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke="#fff" stroke-width="1.7"/><rect x="13" y="3" width="8" height="5" rx="1.5" stroke="#fff" stroke-width="1.7"/><rect x="13" y="10" width="8" height="11" rx="1.5" stroke="#fff" stroke-width="1.7"/><rect x="3" y="13" width="8" height="8" rx="1.5" stroke="#fff" stroke-width="1.7"/></svg>',
+  ui:'<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="#fff" stroke-width="1.7"/><path d="M3 8h18" stroke="#fff" stroke-width="1.7"/><path d="M7 12h6M7 15h9" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>',
+  designsystem:'<svg viewBox="0 0 24 24" fill="none"><circle cx="6.5" cy="7" r="2.5" stroke="#fff" stroke-width="1.7"/><path d="M12 5h8M12 9h5" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/><rect x="4" y="14" width="6" height="5" rx="1.5" stroke="#fff" stroke-width="1.7"/><path d="M13 15h7M13 18h4" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>',
+};
+const docWrap=$("#docTypes");
+DATA.docTypes.forEach(d=>{
+  const b=el("button","pick");b.dataset.id=d.id;
+  b.innerHTML=`<span class="ico">${DOC_ICON[d.id]||''}</span><span><span class="pt">${d.fr}</span><span class="pd">${d.fr2}</span></span>`;
+  b.onclick=()=>setDocType(d.id);
+  docWrap.appendChild(b);
+});
+function setDocType(id){state.docType=id;[...docWrap.children].forEach(b=>b.classList.toggle("on",b.dataset.id===state.docType));updateAll();}
+
+$("#trackSwitch").querySelectorAll(".trackcard").forEach(b=>b.onclick=()=>setTrack(b.dataset.track));
+function setTrack(t){
+  state.track=t;
+  $("#trackSwitch").querySelectorAll(".trackcard").forEach(b=>b.classList.toggle("on",b.dataset.track===t));
+  const design=(t==="design");
+  $("#designPanels").hidden=!design;
+  $("#assetPanels").hidden=design;
+  $("#docTypeRow").style.display=design?"":"none";
+  $("#presets").style.display=design?"":"none";
+  $("#otitle").innerHTML='<span class="dot"></span> '+(design?"Brief pour Claude":"Prompt Midjourney");
+  updateAll();
+}
+
+/* ============================================================
+   ASSETS — construction UI
+   ============================================================ */
+const ASSET_ICON={
+  illustration:'<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="#fff" stroke-width="1.7"/><circle cx="9" cy="10" r="2" stroke="#fff" stroke-width="1.6"/><path d="M4 18l5-4 4 3 3-2 4 3" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  background:'<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="#fff" stroke-width="1.7"/><path d="M3 14c4-5 8 3 12-1s6 1 6 1" stroke="#fff" stroke-width="1.7"/></svg>',
+  hero:'<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="12" rx="2" stroke="#fff" stroke-width="1.7"/><path d="M6 15h8" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>',
+  logo:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#fff" stroke-width="1.7"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  iconset:'<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="2" stroke="#fff" stroke-width="1.7"/><circle cx="17.5" cy="6.5" r="3.5" stroke="#fff" stroke-width="1.7"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="#fff" stroke-width="1.7"/><path d="M14 14l7 7M21 14l-7 7" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>',
+  texture:'<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#fff" stroke-width="1.7"/><path d="M3 8h18M3 13h18M3 18h18" stroke="#fff" stroke-width="1.2" opacity=".7"/></svg>',
+  pattern:'<svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="6" r="2" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="2" stroke="#fff" stroke-width="1.6"/><circle cx="18" cy="6" r="2" stroke="#fff" stroke-width="1.6"/><circle cx="6" cy="18" r="2" stroke="#fff" stroke-width="1.6"/><circle cx="18" cy="18" r="2" stroke="#fff" stroke-width="1.6"/></svg>',
+  motion:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#fff" stroke-width="1.7"/><path d="M10 8l6 4-6 4V8z" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/></svg>',
+  character:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#fff" stroke-width="1.7"/><path d="M5 20c1.5-4 12.5-4 14 0" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>',
+};
+const assetGrid=$("#assetGrid");
+DATA.assetTypes.forEach(a=>{
+  const b=el("button","pick");b.dataset.id=a.id;
+  b.innerHTML=`<span class="ico">${ASSET_ICON[a.id]||''}</span><span><span class="pt">${a.fr}</span><span class="pd">${a.fr2}</span></span>`;
+  b.onclick=()=>setAssetType(a.id);
+  assetGrid.appendChild(b);
+});
+buildChips("#assetStyleChips",DATA.assetStyles,"assetStyles");
+buildChips("#assetMoodChips",DATA.assetMoods,"assetMood");
+
+// Palette d'asset (sélection unique)
+const assetPalWrap=$("#assetPalChips");
+DATA.palettes.forEach(p=>{
+  const ch=el("span","chip",p.fr);ch.dataset.id=p.id;
+  ch.onclick=()=>{state.assetPalette=p.id;syncAsset();updateAll();};
+  assetPalWrap.appendChild(ch);
+});
+// Fond
+DATA.assetBg.forEach(b=>{const o=document.createElement("option");o.value=b.id;o.textContent=b.fr;$("#assetBg").appendChild(o);});
+
+// Bindings assets
+$("#assetSubject").oninput=e=>{state.assetSubject=e.target.value;updateAll();};
+$("#assetPaletteText").oninput=e=>{state.assetPaletteText=e.target.value;updateAll();};
+$("#assetBg").onchange=e=>{state.assetBg=e.target.value;updateAll();};
+$("#assetTile").onchange=e=>{state.assetTile=e.target.checked;updateAll();};
+// Flux — hériter du Design
+$("#assetInherit").onchange=e=>{state.assetInherit=e.target.checked;syncAsset();updateAll();};
+$("#inheritContext").onchange=e=>{state.inheritContext=e.target.checked;updateAll();};
+$("#inheritPalette").onchange=e=>{state.inheritPalette=e.target.checked;syncAsset();updateAll();};
+$("#inheritStyle").onchange=e=>{state.inheritStyle=e.target.checked;updateAll();};
+function escF(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function renderFlowSummary(){
+  const box=$("#flowSummary"); if(!box) return;
+  const cols=paletteColors();
+  const styles=frList(DATA.styles,state.styles); const acc=state.customAccent.trim();
+  if(acc) styles.push(acc);
+  const dt=byId(DATA.docTypes,state.docType);
+  const row=(k,v)=>`<div class="fl-row"><span class="fl-k">${k}</span><span class="fl-v${v?"":" empty"}">${v?escF(v):"—"}</span></div>`;
+  box.innerHTML =
+    `<div class="fl-row"><span class="fl-k">Source</span><span class="fl-v">${dt?dt.fr:"Design"} · Claude</span></div>`
+   +row("Type",state.appType.trim())
+   +row("Cible",state.audience.trim())
+   +row("Objectif",state.goal.trim())
+   +`<div class="fl-row"><span class="fl-k">Palette</span><span class="fl-sw">${cols.map(c=>`<i style="background:${c}"></i>`).join("")}</span></div>`
+   +(styles.length?`<div class="fl-row"><span class="fl-k">Style</span><span class="fl-tags">${styles.slice(0,6).map(s=>`<b>${escF(s)}</b>`).join("")}</span></div>`:"");
+}
+
+function setAssetType(id){
+  state.assetType=id;
+  const at=byId(DATA.assetTypes,id);
+  if(at){ state.ar=at.ar; state.stylize=at.sty; }
+  state.assetTile=(id==="texture"||id==="pattern");
+  state.assetBg=(id==="logo"||id==="iconset")?"transparent":((id==="background"||id==="hero")?"gradient":"plain");
+  syncAsset();
+  updateAll();
+}
+function syncAsset(){
+  [...assetGrid.children].forEach(b=>b.classList.toggle("on",b.dataset.id===state.assetType));
+  syncAR();
+  $("#stylize").value=state.stylize; $("#stylizeVal").textContent=state.stylize;
+  $("#chaos").value=state.chaos; $("#chaosVal").textContent=state.chaos;
+  $("#weird").value=state.weird; $("#weirdVal").textContent=state.weird;
+  $("#version").value=state.version; $("#rawMode").checked=state.raw;
+  $("#noField").value=state.no; $("#srefField").value=state.sref;
+  $("#assetSubject").value=state.assetSubject;
+  $("#assetPaletteText").value=state.assetPaletteText;
+  $("#assetBg").value=state.assetBg;
+  $("#assetTile").checked=state.assetTile;
+  $("#assetInherit").checked=state.assetInherit;
+  $("#inheritContext").checked=state.inheritContext;
+  $("#inheritPalette").checked=state.inheritPalette;
+  $("#inheritStyle").checked=state.inheritStyle;
+  $("#flowBody").style.opacity=state.assetInherit?"1":".45";
+  $("#flowBody").style.pointerEvents=state.assetInherit?"":"none";
+  $("#assetPalField").style.display=(state.assetInherit&&state.inheritPalette)?"none":"";
+  syncChips("#assetStyleChips","assetStyles"); syncChips("#assetMoodChips","assetMood");
+  [...assetPalWrap.children].forEach(ch=>ch.classList.toggle("on",ch.dataset.id===state.assetPalette));
+  renderFlowSummary();
 }
 
 /* ============================================================
@@ -1097,11 +1452,29 @@ function accentGrad(){
   }
   return ACCENT_GRAD[state.palette]||ACCENT_GRAD.aurora;
 }
+function paletteColors(){
+  if(state.palette==="custom"&&state.customColors&&state.customColors.length) return state.customColors.slice(0,6);
+  const p=byId(DATA.palettes,state.palette); return p?p.colors:["#7C3AED","#C026D3","#EC4899"];
+}
+function accentGradFor(){
+  if(state.track==="asset" && !(state.assetInherit&&state.inheritPalette)){
+    return ACCENT_GRAD[state.assetPalette]||ACCENT_GRAD.aurora;
+  }
+  return accentGrad();
+}
 function renderPreview(){
   const mock=$("#mock");
-  mock.className="mock"+(state.mode==="light"?" light":"");
-  mock.style.setProperty("--accent-grad",accentGrad());
-  $("#mockTitle").textContent = (byId(DATA.architecture,state.architecture)?.fr||"aperçu")+" · composition";
+  mock.style.setProperty("--accent-grad",accentGradFor());
+  if(state.track==="asset"){ renderAssetPreview(mock); return; }
+  const lightCls=state.mode==="light"?" light":"";
+  if(state.docType==="designsystem"){ mock.className="mock"+lightCls; $("#mockTitle").textContent="fiche · design system"; renderSheet(mock); return; }
+  if(state.docType==="moodboard"){ mock.className="mock"+lightCls; $("#mockTitle").textContent="planche · moodboard"; renderMoodboard(mock); return; }
+  // UI Design = maquette de page
+  mock.className="mock"+lightCls;
+  $("#mockTitle").textContent=(byId(DATA.architecture,state.architecture)?.fr||"aperçu")+" · maquette UI";
+  renderUIWire(mock);
+}
+function renderUIWire(mock){
   const secs = state.sections.length ? state.sections : ["hero","features","footer"];
   const useBento = state.layouts.has("bento");
   mock.innerHTML="";
@@ -1126,6 +1499,40 @@ function renderPreview(){
     }
     mock.appendChild(blk);
   });
+}
+function renderSheet(mock){
+  const cols=paletteColors();
+  mock.innerHTML=
+    `<div class="mk"><div class="mk-t">Color palette</div><div class="sheet-sw">${cols.map(c=>`<i style="background:${c}"></i>`).join("")}</div></div>`
+   +`<div class="mk"><div class="mk-t">Typography</div><div class="sheet-type"><b>Aa</b><span><i class="bar w70"></i><i class="bar w45"></i></span></div></div>`
+   +`<div class="mk"><div class="mk-t">Components</div><div class="sheet-comp"><b class="pill"></b><b class="pill ghost"></b><i class="box"></i></div></div>`
+   +`<div class="mk"><div class="mk-t">Page mockups</div><div class="mk-cards"><i></i><i class="accent"></i><i></i></div></div>`;
+}
+function renderMoodboard(mock){
+  const cols=paletteColors();
+  mock.innerHTML=`<div class="mood-grid">`
+   +`<i class="mood-lg"></i>`
+   +`<i class="mood-sw">${cols.map(c=>`<u style="background:${c}"></u>`).join("")}</i>`
+   +`<i class="mood-type">Aa</i>`
+   +`<i class="mood-img"></i>`
+   +`<i class="mood-sm"></i><i class="mood-sm"></i>`
+   +`</div>`;
+}
+function renderAssetPreview(mock){
+  mock.className="mock asset"+(state.mode==="light"?" light":"");
+  const at=byId(DATA.assetTypes,state.assetType);
+  $("#mockTitle").textContent="asset · "+(at?at.fr.toLowerCase():"");
+  const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  let inner;
+  if(state.assetType==="pattern"||state.assetType==="texture"){
+    inner=`<div class="asset-pat">${Array.from({length:16}).map(()=>"<i></i>").join("")}</div>`;
+  } else if(state.assetType==="logo"||state.assetType==="iconset"){
+    inner=`<div class="asset-mark"><span class="dot"></span></div>`;
+  } else {
+    inner=`<div class="asset-fill"></div>`;
+  }
+  const lbl=(at?at.fr:"")+(state.assetSubject.trim()?" · "+esc(state.assetSubject.trim()):"");
+  mock.innerHTML=`<div class="asset-preview">${inner}<div class="asset-label">${lbl}</div></div>`;
 }
 
 /* ============================================================
@@ -1211,21 +1618,152 @@ function generateStructured(){
   return {body:lines.join("\n"), params:buildParams()};
 }
 
+/* ---- Piste DESIGN → brief pour Claude (FR) ---- */
+function paletteBrief(){
+  if(state.palette==="custom"&&state.customColors&&state.customColors.length) return "palette personnalisée "+state.customColors.slice(0,6).join(", ");
+  const p=byId(DATA.palettes,state.palette); return p?`${p.fr} (${p.colors.join(", ")})`:"";
+}
+function generateBrief(){
+  const subj=state.appType.trim()||"un produit numérique";
+  const aud=state.audience.trim(), goal=state.goal.trim();
+  const mode=state.mode==="light"?"clair":"sombre";
+  const pal=paletteBrief(), accent=state.customAccent.trim();
+  const styles=frList(DATA.styles,state.styles), refs=frList(DATA.references,state.references);
+  const comps=frList(DATA.components,state.components), quals=frList(DATA.quality,state.quality);
+  const secs=state.sections.map(id=>byId(DATA.sectionTypes,id)?.fr).filter(Boolean);
+  const dir=[...styles,...refs.map(r=>"inspiration "+r)];
+  const common="en HTML/CSS/JS vanilla, fichier unique autosuffisant, sans dépendance externe (polices système ou @font-face inline, SVG inline)";
+  const L=[];
+  if(state.docType==="designsystem"){
+    L.push(`Génère un **DESIGN SYSTEM** (fiche de style type Figma) ${common}, pour ${subj}${aud?` destiné à ${aud}`:""}.`);
+    if(goal) L.push(`Objectif : ${goal}.`);
+    L.push(`Mise en page : une planche **plate et structurée**, grille orthogonale — pas de perspective ni de scène 3D. Thème ${mode}.`);
+    L.push("");
+    L.push("Sections à produire :");
+    L.push(`• COLOR PALETTE — pastilles de couleur avec codes hex${pal?` : ${pal}`:""}${accent?` ; accent : ${accent}`:""}.`);
+    L.push(`• TYPOGRAPHY — paire de polices (titres / texte), échelle typographique (H1 → légende) et graisses.`);
+    L.push(`• UI COMPONENTS — boutons (primaire, secondaire, ghost), champs de saisie, cartes, badges/tags${comps.length?`, ${comps.join(", ")}`:""}.`);
+    if(secs.length) L.push(`• PAGE MOCKUPS — petites maquettes à plat de : ${secs.join(", ")}.`);
+    L.push(`• FORMES & ÉTATS — rayons d'angle, ombres, états (repos / survol / actif).`);
+    L.push("");
+    if(dir.length) L.push(`Direction esthétique : ${dir.join(", ")}.`);
+    L.push(`Contraintes : un seul accent dominant, contraste AA (≥ 4.5:1), coins arrondis, tokens centralisés (variables CSS :root), responsive.`);
+  } else if(state.docType==="moodboard"){
+    L.push(`Génère un **MOODBOARD** (planche d'inspiration) ${common}, pour ${subj}${aud?` destiné à ${aud}`:""}.`);
+    if(goal) L.push(`Objectif : ${goal}.`);
+    L.push(`Disposition : **collage à plat / knolling** — tuiles juxtaposées, aucune perspective. Thème ${mode}.`);
+    L.push("");
+    L.push("Tuiles à inclure :");
+    L.push(`• Pastilles de palette avec hex${pal?` : ${pal}`:""}${accent?` ; accent ${accent}`:""}.`);
+    L.push(`• Échantillons typographiques (grands caractères + paragraphe).`);
+    L.push(`• Mots-clés d'ambiance${quals.length?` : ${quals.join(", ")}`:""}.`);
+    if(refs.length) L.push(`• Références visuelles : ${refs.join(", ")}.`);
+    if(comps.length) L.push(`• Vignettes de composants : ${comps.join(", ")}.`);
+    L.push(`• Aplats de couleur et textures.`);
+    L.push("");
+    if(styles.length) L.push(`Direction : ${styles.join(", ")}.`);
+    L.push(`Contraintes : mise à plat, une seule couleur d'accent, cohérence, contraste AA.`);
+  } else {
+    const arch=byId(DATA.architecture,state.architecture);
+    const layouts=frList(DATA.layouts,state.layouts);
+    L.push(`Génère une **MAQUETTE UI** (page web complète) ${common}, pour ${subj}${aud?` destiné à ${aud}`:""}.`);
+    if(goal) L.push(`Objectif : ${goal}.`);
+    L.push(`Architecture : ${arch?arch.fr:"one page"}${layouts.length?` · layout ${layouts.join(", ")}`:""}. Thème ${mode}.`);
+    if(secs.length){ L.push(""); L.push("Sections (dans l'ordre) :"); secs.forEach((s,i)=>L.push(`${i+1}. ${s}`)); }
+    L.push("");
+    if(comps.length) L.push(`Composants : ${comps.join(", ")}.`);
+    if(dir.length) L.push(`Style : ${dir.join(", ")}.`);
+    if(pal) L.push(`Palette : ${pal}${accent?` ; accent ${accent}`:""}.`);
+    L.push(`Contraintes : responsive, contraste AA, animations sobres (opacity/transform), un seul accent dominant, coins arrondis.`);
+  }
+  return {body:L.join("\n"), params:""};
+}
+
+/* ---- Piste ASSETS → prompt Midjourney ---- */
+function palettePhrase(palId,custom){
+  if(palId==="custom"&&custom&&custom.length) return "color palette ("+custom.slice(0,5).join(", ")+")";
+  const p=byId(DATA.palettes,palId); return p?p.mj:"";
+}
+function buildAssetParams(){
+  const p=[];
+  p.push(`--ar ${state.ar}`);
+  if(state.stylize!==100) p.push(`--stylize ${state.stylize}`);
+  if(state.chaos>0) p.push(`--chaos ${state.chaos}`);
+  if(state.weird>0) p.push(`--weird ${state.weird}`);
+  if(state.assetTile) p.push(`--tile`);
+  if(state.raw && !state.version.startsWith("niji")) p.push(`--style raw`);
+  const negs=[]; const bg=byId(DATA.assetBg,state.assetBg);
+  if(bg&&bg.no) negs.push(bg.no);
+  if(state.no.trim()) negs.push(state.no.trim());
+  if(negs.length) p.push(`--no ${negs.join(", ")}`);
+  if(state.sref.trim()) p.push(`--sref ${state.sref.trim()}`);
+  p.push(state.version.startsWith("niji")?`--${state.version}`:`--v ${state.version}`);
+  return p.join(" ");
+}
+function generateAsset(){
+  const subj=state.assetSubject.trim();
+  const S=subj||"…";
+  const styles=mjList(DATA.assetStyles,state.assetStyles);
+  const moods=mjList(DATA.assetMoods,state.assetMood);
+  const useDesignPal=state.assetInherit&&state.inheritPalette;
+  const pal=useDesignPal
+      ? palettePhrase(state.palette,state.customColors)
+      : [palettePhrase(state.assetPalette,null),state.assetPaletteText.trim()].filter(Boolean).join(", ");
+  const bg=byId(DATA.assetBg,state.assetBg);
+  const narrative=!["logo","iconset","texture","pattern"].includes(state.assetType);
+  const parts=[];
+  switch(state.assetType){
+    case "logo": parts.push(`minimalist logo${subj?` for ${S}`:""}, iconic symbol mark, simple, memorable, vector, centered, flat design`); break;
+    case "iconset": parts.push(`a cohesive set of ${subj?S+" ":""}UI icons, uniform grid, consistent stroke weight, simple pictograms`); break;
+    case "background": parts.push(`abstract website background${subj?`, ${S}`:""}, spacious composition with large empty negative space for text overlay`); break;
+    case "hero": parts.push(`wide hero banner key visual${subj?` of ${S}`:""}, cinematic composition, empty space reserved for a headline`); break;
+    case "texture": parts.push(`seamless surface texture${subj?` of ${S}`:""}, close-up material, evenly lit`); break;
+    case "pattern": parts.push(`seamless repeating pattern${subj?` of ${S}`:""}, evenly distributed motif, flat`); break;
+    case "motion": parts.push(`dynamic key visual${subj?` of ${S}`:""}, strong sense of motion and flow, animation frame`); break;
+    case "character": parts.push(`character design${subj?` of ${S}`:""}, expressive, full body, neutral pose, clean silhouette`); break;
+    default: parts.push(`editorial illustration${subj?` of ${S}`:""}`);
+  }
+  // Contexte hérité du Design (type · cible · objectif deviennent des éléments de brief visuel)
+  if(state.assetInherit&&state.inheritContext){
+    const t=state.appType.trim(), a=state.audience.trim(), g=state.goal.trim();
+    const ctx=[];
+    if(t) ctx.push(`brand visual for ${t.toLowerCase()}`);
+    if(a&&narrative) ctx.push(`audience: ${a}`);
+    if(g&&narrative) ctx.push(`purpose: ${g}`);
+    if(ctx.length) parts.push(ctx.join(", "));
+  }
+  styles.forEach(x=>parts.push(x));
+  moods.forEach(x=>parts.push(x));
+  // Style & accent hérités du Design (cohérence de marque)
+  if(state.assetInherit&&state.inheritStyle){
+    const ds=mjList(DATA.styles,state.styles); const acc=state.customAccent.trim();
+    const brand=[...ds]; if(acc) brand.push(acc);
+    if(brand.length) parts.push(`consistent with the brand aesthetic (${brand.join(", ")})`);
+  }
+  if(pal) parts.push(pal);
+  if(bg) parts.push(bg.mj);
+  return {body:parts.filter(Boolean).join(", "), params:buildAssetParams()};
+}
+
 function updatePrompt(){
-  const gen = state.outputMode==="keywords"?generateKeywords():generateStructured();
-  const full = gen.body + "\n\n" + gen.params;
-  // Rendu coloré (params en rose)
-  const promptEl=$("#prompt");
+  const gen = state.track==="design" ? generateBrief() : generateAsset();
   const esc = s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-  let html = esc(gen.body);
-  const paramsHtml = esc(gen.params).replace(/(--[a-z0-9]+(?:\.[0-9]+)?)/gi,'<span class="p-param">$1</span>');
-  promptEl.innerHTML = html + "\n\n" + paramsHtml;
+  let full, html;
+  if(gen.params){
+    full = gen.body + "\n\n" + gen.params;
+    html = esc(gen.body) + "\n\n" + esc(gen.params).replace(/(--[a-z0-9]+(?:\.[0-9]+)?)/gi,'<span class="p-param">$1</span>');
+  } else {
+    full = gen.body;
+    html = esc(gen.body);
+  }
+  const promptEl=$("#prompt");
+  promptEl.innerHTML = html;
   promptEl.dataset.raw = full;
   const words = full.trim().split(/\s+/).length;
   $("#wordcount").textContent = `${words} mots · ${full.length} caractères`;
 }
 
-function updateAll(){renderSections();renderPreview();updatePrompt();syncPresetBar();}
+function updateAll(){renderSections();renderPreview();updatePrompt();syncPresetBar();if($("#flowSummary"))renderFlowSummary();}
 
 /* ============================================================
    COPIER / RÉINITIALISER
@@ -1246,21 +1784,25 @@ let toastT;
 function showToast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),1800);}
 
 $("#resetBtn").onclick=()=>{
+  const t=state.track, dt=state.docType;
   const pick=palGrid.querySelector('.palpick[data-id="custom"]'); if(pick) pick.remove();
   dz.swatches=[]; dz.lastData=null;
   dz.result.hidden=true; dz.thumb.removeAttribute("src"); dz.sw.innerHTML=""; dz.input.value="";
   dz.count.value=5; dz.countVal.textContent="5";
-  state={...DEFAULTS, layouts:new Set(),styles:new Set(),components:new Set(),references:new Set(),quality:new Set(), sections:[], customColors:null};
-  state.outputMode = $("#outSeg .on")?.dataset.out || "structured";
-  syncFormFromState();
-  updateAll();
+  state={...DEFAULTS, ...freshSets(), sections:[], customColors:null, track:t, docType:dt};
+  syncFormFromState(); syncAsset();
+  setDocType(dt); setTrack(t);
   showToast("Réinitialisé");
 };
 
 /* ============================================================
-   INIT — on démarre sur le preset "Premium SaaS"
+   INIT
    ============================================================ */
-applyPreset("premium");
+$("#outSeg").style.display="none";      // les modes Structuré/Mots-clés ne s'appliquent plus aux deux pistes
+setAssetType("illustration");           // règle les paramètres MJ par défaut de la piste assets
+applyPreset("premium");                 // pré-remplit la piste design
+setDocType("designsystem");
+setTrack("design");                     // on démarre sur la piste Design → Claude
 </script>
 </body>
 </html>
